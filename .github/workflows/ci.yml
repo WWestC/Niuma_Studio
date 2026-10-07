@@ -1,0 +1,85 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    # Same per-OS webview/cgo toolchain as release.yml — windows (mingw) and
+    # linux (WebKitGTK) breakage never shows up on another OS, so daily CI
+    # covers all three desktop platforms, not just linux.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { goos: darwin, runs-on: macos-latest }
+          - { goos: windows, runs-on: windows-latest }
+          - { goos: linux, runs-on: ubuntu-latest }
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: Linux window deps (GTK + WebKitGTK)
+        if: matrix.goos == 'linux'
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
+      - name: Windows cgo toolchain (mingw-w64 gcc)
+        if: matrix.goos == 'windows'
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: false
+          install: mingw-w64-x86_64-gcc
+      - name: Put mingw64 gcc on PATH for cgo
+        if: matrix.goos == 'windows'
+        run: echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
+      - name: gofmt (vendored webview/ excluded)
+        if: matrix.goos == 'linux'
+        run: |
+          out="$(gofmt -l . | grep -v '^webview/' || true)"
+          if [ -n "$out" ]; then
+            echo "these files need gofmt:"
+            echo "$out"
+            exit 1
+          fi
+      - name: Vet
+        env:
+          CGO_ENABLED: "1"
+        run: go vet ./...
+      - name: Build
+        env:
+          CGO_ENABLED: "1"
+        run: go build ./...
+      - name: Test
+        env:
+          CGO_ENABLED: "1"
+        run: go test ./...
+      # The race leg is the concurrency cores only (chat/dispatch/server/
+      # sqlstore + the composition root) — the discipline command the
+      # verify passes have been running locally (-race first caught two
+      # live flusher races here). Concurrency is this codebase's core
+      # complexity; the guard belongs in CI, not in memory. Full-tree
+      # -race stays out: the timing-shaped suites elsewhere only slow
+      # down under it.
+      - name: Test (race — concurrency cores)
+        env:
+          CGO_ENABLED: "1"
+        run: go test -race ./chat/ ./dispatch/ ./server/ ./sqlstore/ .
+
+  web:
+    # Pure-JS tests, node builtin runner, zero deps — one fast linux job.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Frontend tests
+        run: find web -name '*.test.js' -not -path '*/node_modules/*' -print0 | xargs -0 node --test

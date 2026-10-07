@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>牛马工作室</title>
+<!-- PWA（v2 P4-d）：添加到 Dock/主屏后以独立窗口运行，无地址栏 -->
+<link rel="manifest" href="/app/manifest.webmanifest">
+<meta name="theme-color" content="#f5f6f7">
+<link rel="icon" type="image/png" sizes="192x192" href="/app/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/app/icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script>
+  // page-level error sink: the app face is a single page — anything
+  // the boards throw lands here for the room tip/console triage
+  window.__errs = [];
+  window.addEventListener('error', (e) => window.__errs.push(`${e.message} @${e.filename}:${e.lineno}`));
+  window.addEventListener('unhandledrejection', (e) => window.__errs.push(`rejection: ${e.reason}`));
+  // native shell only (webview bindings are injected at document
+  // start): report the chrome color so the window background paints
+  // --titlebar, and flag full-bleed chrome — the page runs up under
+  // the transparent titlebar strip, so the columns pad their tops
+  // clear of the traffic lights / drag strip (see --tb-h below)
+  if (typeof window.setChromeColor === 'function') {
+    document.documentElement.dataset.nativetb = '1';
+    window.addEventListener('load', () => {
+      const v = getComputedStyle(document.documentElement).getPropertyValue('--titlebar').trim();
+      if (v) window.setChromeColor(v);
+    });
+  }
+  // 主题早落（防白闪）：设置偏好存 dh.ui.prefs.theme（light/dark/system），
+  // system 跟随系统 prefers-color-scheme——在首帧渲染前把 data-theme 落到
+  // <html>，深色用户不必先看一帧白。运行时换季由 settings.js 接管
+  // （含原生标题栏/浏览器 theme-color 同步）；这里只管别闪。
+  try {
+    const t = (JSON.parse(localStorage.getItem('dh.ui.prefs')) || {}).theme;
+    if (t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.dataset.theme = 'dark';
+    }
+  } catch { /* 无存储/私密模式：默认浅色 */ }
+  // 语言早落：与 ui/i18n.js 的 langPref() 同一套判定（手动值优先，未选过
+  // 跟随系统），首帧前把 <html lang> 与文档标题拉对——读屏器/字体选择
+  // 不闪。文本翻译不在这里做（节点还没解析）：启动门文案由 body 末尾的
+  // 门闩内联脚本现翻，其余静态文本由 app.js 的 applyStaticI18n() 接管。
+  try {
+    const saved = (JSON.parse(localStorage.getItem('dh.ui.prefs')) || {}).lang;
+    const nav = navigator.language || '';
+    if (saved === 'en' || (saved !== 'zh' && nav && !/^zh/i.test(nav))) {
+      document.documentElement.lang = 'en';
+      document.title = 'Niuma Studio';
+    }
+  } catch { /* 无存储/私密模式：默认中文 */ }
+</script>
+<link rel="stylesheet" href="/app/app.css">
+</head>
+<body>
+  <!-- 启动门（ZCode 识别＋启动编制招聘）：本应用与 ZCode 完全绑定——点击
+       应用后先在此等 ZCode 识别完成、再把启动编制（编排者小牛/HR 小马）
+       招聘满员（像素小牛动画＋状态行交待进度），识别成功且满编才进办公
+       室。门与绘制全内联，模块加载前就已上屏；开合逻辑在
+       web/ui/boot.js（GET /zcode 轮询） -->
+  <div id="boot">
+    <div id="boot-card">
+      <canvas id="boot-mascot" width="16" height="12" aria-hidden="true"></canvas>
+      <div id="boot-name">牛马工作室</div>
+      <div id="boot-en">Niuma Studio</div>
+      <div id="boot-bar" aria-hidden="true"></div>
+      <div id="boot-status">
+        <span id="boot-status-text">正在启动办公室…</span><span id="boot-dots" hidden><i>·</i><i>·</i><i>·</i></span>
+      </div>
+      <div id="boot-fail" hidden>
+        <p id="boot-fail-text"></p>
+        <div id="boot-actions">
+          <button id="boot-retry" type="button">重新检测</button>
+          <button id="boot-copy" type="button">复制错误</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // 启动门文案现翻（模块加载前）：与 head 内联脚本同一套语言判定，
+    // 但这里不能 import i18n——门面这几条内联自足（英文译文就地成对
+    // 写）。模块上来后 boot.js 的状态行走 t()，与此互不干扰（译文同源
+    // 于 i18n_en.js 的同几条）。BOOT_EN 也供 20 秒门闩兜底面板用。
+    var BOOT_EN = (function () {
+      try {
+        var saved = (JSON.parse(localStorage.getItem('dh.ui.prefs')) || {}).lang;
+        var nav = navigator.language || '';
+        return saved === 'en' || (saved !== 'zh' && !!nav && !/^zh/i.test(nav));
+      } catch (e) { return false; }
+    })();
+    if (BOOT_EN) {
+      var bootSet = function (id, text) { var el = document.getElementById(id); if (el) el.textContent = text; };
+      bootSet('boot-status-text', 'Starting the office…');
+      bootSet('boot-retry', 'Retry');
+      bootSet('boot-copy', 'Copy error');
+    }
+    // 像素小牛（牛马本牛）是活的：眼珠跟着鼠标走（3×3 白眼眶内四象
+    // 限落点），隔两秒半眨一下眼，点了就张嘴「哞」一声（Web Audio
+    // 当场合成——点击本身就是手势，AudioContext 不愁解锁）。16×12
+    // 像素格（canvas 1px＝1 格，CSS 放大保像素感）；boot.js 只管状
+    // 态行，不碰这块画布。h 角 w 眼眶 b 脸 E 耳 e 眼珠 m 鼻镜/额斑
+    // n 鼻孔/闭眼线/口腔
+    (function () {
+      var cv = document.getElementById('boot-mascot');
+      if (!cv) return;
+      var PAL = { h: '#e6d9bd', b: '#c08552', w: '#f7f0e1', m: '#e9bd92', n: '#8a5a38', e: '#33291f', E: '#a06b40' };
+      var OPEN = [
+        '...hh......hh...',
+        '..hhh......hhh..',
+        '....bbbbbbbb....',
+        '..EEbbmmmmbbEE..',   // 额斑走鼻镜色 m——与眼白同色时会把双眼连成一条带
+        '..EbwwwbwwwbbE..',   // 第 7 列鼻梁棕、第 11 列收棕：两眶各 3 宽左右对称
+        '...bbbbbbbbbb...',
+        '...bbbbbbbbbb...',
+        '..bbbbbbbbbbbb..',
+        '...bmmmmmmmmb...',
+        '...bmnmmmmnmb...',
+        '...bmmmmmmmmb...',
+        '....bbbbbbbb....'
+      ];
+      var ctx = cv.getContext('2d');
+      var poke = function (s, x, c) { return s.slice(0, x) + c + s.slice(x + 1); };
+      var live = function () { return cv.isConnected; };
+
+      // 注视方向：眼珠（2×2）在眼眶（3×3）里的落点，四象限量化只有
+      // 0/1 两档；默认 (1,1)＝眼珠沉在眶右下，与初版手绘的正位重合
+      var gaze = { x: 1, y: 1 };
+      var blinking = false, mooing = false;
+
+      function redraw() {
+        var rows = OPEN.slice();
+        var x, y, i, dx, dy;
+        if (mooing) {            // 张嘴：鼻镜下缘裂开成暗色口腔（上宽下窄）
+          for (x = 5; x <= 10; x++) rows[10] = poke(rows[10], x, 'n');
+          for (x = 6; x <= 9; x++) rows[11] = poke(rows[11], x, 'n');
+        }
+        for (y = 4; y <= 6; y++) // 两个 3×3 眼眶，x=7 留棕作鼻梁分隔
+          for (x = 4; x <= 10; x++)
+            if (x !== 7) rows[y] = poke(rows[y], x, blinking ? 'b' : 'w');
+        if (blinking) {          // 闭眼：眶里填回脸色只留一条鼻孔色眼线；
+          for (x = 4; x <= 6; x++) rows[5] = poke(rows[5], x, 'n');
+          for (x = 8; x <= 10; x++) rows[5] = poke(rows[5], x, 'n');
+        } else {                 // 眼珠按注视方向贴眼眶四角
+          for (i = 0; i < 2; i++)
+            for (dy = 0; dy < 2; dy++)
+              for (dx = 0; dx < 2; dx++) {
+                y = 4 + gaze.y + dy;
+                rows[y] = poke(rows[y], (i ? 8 : 4) + gaze.x + dx, 'e');
+              }
+        }
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        for (y = 0; y < rows.length; y++)
+          for (x = 0; x < rows[y].length; x++) {
+            var c = PAL[rows[y][x]];
+            if (c) { ctx.fillStyle = c; ctx.fillRect(x, y, 1, 1); }
+          }
+      }
+      redraw();
+
+      // 眼随鼠标：算指向画布中心的方位量化成四象限落点，落点变了才
+      // 重画；中心 20px 死区防指针贴脸时左右抖动
+      document.addEventListener('mousemove', function (ev) {
+        if (!live()) return;
+        var r = cv.getBoundingClientRect();
+        var mx = ev.clientX - (r.left + r.width / 2),
+            my = ev.clientY - (r.top + r.height / 2);
+        if (Math.abs(mx) < 20 && Math.abs(my) < 20) return;
+        var nx = mx >= 0 ? 1 : 0, ny = my >= 0 ? 1 : 0;
+        if (nx !== gaze.x || ny !== gaze.y) { gaze.x = nx; gaze.y = ny; redraw(); }
+      }, { passive: true });
+
+      // 眨眼：门被摘除（dismissBoot）后 interval 自停，不留空转
+      if (!window.matchMedia || !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var blinkTimer = setInterval(function () {
+          if (!live()) { clearInterval(blinkTimer); return; }
+          blinking = true; redraw();
+          setTimeout(function () { blinking = false; if (live()) redraw(); }, 150);
+        }, 2800);
+      }
+
+      // 哞——锯齿波从 145Hz 滑到 82Hz、低通随「张口→收口」先开后
+      // 窄、5.5Hz 喉音颤动，闷出一声牛叫；连点打断重叫（上一声 40ms
+      // 收干再起新声）。声音是彩蛋，任何失败都静默——无声也张嘴
+      var mooAC = null, mooGain = null, mooT = 0;
+      function mooSound() {
+        try {
+          var AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return;
+          if (!mooAC) mooAC = new AC();
+          if (mooAC.state === 'suspended') mooAC.resume();
+          var t = mooAC.currentTime;
+          if (mooGain) {
+            mooGain.gain.cancelScheduledValues(t);
+            mooGain.gain.setValueAtTime(mooGain.gain.value || .0001, t);
+            mooGain.gain.linearRampToValueAtTime(0, t + .04);
+            mooGain = null;
+          }
+          var o = mooAC.createOscillator(), g = mooAC.createGain(),
+              f = mooAC.createBiquadFilter(),
+              lfo = mooAC.createOscillator(), lg = mooAC.createGain();
+          o.type = 'sawtooth';
+          o.frequency.setValueAtTime(145, t);
+          o.frequency.exponentialRampToValueAtTime(100, t + .5);
+          o.frequency.exponentialRampToValueAtTime(82, t + .75);
+          f.type = 'lowpass'; f.Q.value = 1.2;
+          f.frequency.setValueAtTime(320, t);
+          f.frequency.linearRampToValueAtTime(700, t + .18);
+          f.frequency.linearRampToValueAtTime(240, t + .75);
+          lfo.frequency.value = 5.5; lg.gain.value = 6;
+          lfo.connect(lg); lg.connect(o.frequency);
+          g.gain.setValueAtTime(0, t);
+          g.gain.linearRampToValueAtTime(.18, t + .07);
+          g.gain.setValueAtTime(.18, t + .45);
+          g.gain.exponentialRampToValueAtTime(.001, t + .78);
+          o.connect(f); f.connect(g); g.connect(mooAC.destination);
+          o.start(t); lfo.start(t); o.stop(t + .8); lfo.stop(t + .8);
+          mooGain = g;
+        } catch (e) { /* 静默 */ }
+      }
+      cv.addEventListener('click', function () {
+        mooSound();
+        mooing = true; redraw();
+        clearTimeout(mooT);
+        mooT = setTimeout(function () { mooing = false; if (live()) redraw(); }, 620);
+      });
+    })();
+    // 门闩保险：20 秒后若门的开合逻辑（ui/boot.js）还没接管——模块加
+    // 载失败之类——把失败原因亮在门上（不撤门：失败不放行，这是本应
+    // 用的铁律），只留一个整页重载的出口。装收集器在本段（先于 3644
+    // 行的模块 script 执行）：模块装载期最早的几条 window error 存下
+    // 来，兜底面板亮真错（含文件行号）而非一句查无可查的套话——
+    // 「应用未能启动」八个字帮不了任何人，真错能直接指出坏文件
+    var bootErrs = [];
+    window.addEventListener('error', function (e) {
+      if (e && e.message && bootErrs.length < 3) {
+        bootErrs.push(e.message + (e.filename ? '（' + e.filename.split('/').pop() + ':' + e.lineno + '）' : ''));
+      }
+    });
+    setTimeout(function () {
+      if (window.__bootGateLive) return;
+      var text = document.getElementById('boot-fail-text');
+      var panel = document.getElementById('boot-fail');
+      var retry = document.getElementById('boot-retry');
+      if (!text || !panel || !retry) return;
+      if (bootErrs.length) {
+        text.textContent = (BOOT_EN ? 'Page failed to load: ' : '页面加载失败：') + bootErrs.join(BOOT_EN ? '; ' : '；');
+      } else {
+        text.textContent = BOOT_EN ? 'Page failed to load — the app did not start, please relaunch it' : '页面加载失败——应用未能启动，请重启应用';
+      }
+      retry.textContent = BOOT_EN ? 'Reload' : '重新加载';
+      retry.addEventListener('click', function () { location.reload(); });
+      var copy = document.getElementById('boot-copy');
+      if (copy) copy.hidden = !bootErrs.length; // 有真错才给复制钮（拿去问人/贴给 AI），套话不给
+      panel.hidden = false;
+    }, 20000);
+  </script>
+  <!-- 标题条工具簇（ZCode 式）：☰ 开合侧栏＋← 回退 → 前进。原生壳里
+       住系统标题条内、贴着红黄绿右边（窗口 0–28 那条罩子带，穿透带
+       开洞让钮可点——见样式表 #titlebar-tools 块注记）；浏览器/分享
+       页无标题条，自占一条细杆 -->
+  <div id="titlebar-tools">
+    <button id="nav-toggle" type="button" aria-label="打开导航" aria-controls="side" aria-expanded="false" data-i-aria="打开导航"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/></svg></button>
+    <button id="nav-back" class="tbtn" type="button" title="回退（上一板块）" aria-label="回退（上一板块）" disabled data-i-title="回退（上一板块）" data-i-aria="回退（上一板块）"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 8H3"/><path d="M6.5 4.5 3 8l3.5 3.5"/></svg></button>
+    <button id="nav-fwd" class="tbtn" type="button" title="前进（下一板块）" aria-label="前进（下一板块）" disabled data-i-title="前进（下一板块）" data-i-aria="前进（下一板块）"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10"/><path d="M9.5 4.5 13 8l-3.5 3.5"/></svg></button>
+  </div>
+  <aside id="side">
+    <section id="project-switch">
+      <!-- 项目空间入口（v2.12）：原灰色「办公室」小标题的位子换成可点的
+           入口——开 spacegate.js 的项目空间面板（全部项目＋立项） -->
+      <button id="side-space" type="button" title="打开项目空间" aria-haspopup="dialog" data-i-title="打开项目空间"><span data-i="项目空间">项目空间</span><svg class="ico" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5 8 10.5 12 6.5"/></svg></button>
+      <nav id="room-switch"></nav>
+    </section>
+    <section>
+      <h2 data-i="板块">板块</h2>
+      <nav id="board-nav">
+        <a id="nav-room" href="#/room"><i class="nv-ico" aria-hidden="true"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="11" height="11" rx="1"/><path d="M5.5 5.5h.01M10.5 5.5h.01M5.5 8h.01M10.5 8h.01M5.5 10.5h.01M10.5 10.5h.01"/><path d="M7 13.5v-2.3h2v2.3"/></svg></i><span class="nv-txt" data-i="办公室">办公室</span><span class="nav-dot" id="nav-room-dot" hidden></span></a>
+        <a id="nav-people" href="#/people"><i class="nv-ico" aria-hidden="true"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.25" cy="5.25" r="2.75"/><path d="M1.75 13.5c0-2.7 2-4.35 4.5-4.35s4.5 1.65 4.5 4.35"/><path d="M10.75 3a2.75 2.75 0 0 1 0 4.5"/><path d="M11.9 9.5c1.4.7 2.35 1.9 2.35 4"/></svg></i><span class="nv-txt" data-i="牛马管理">牛马管理</span></a>
+        <a id="nav-project" href="#/project"><i class="nv-ico" aria-hidden="true"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="9" height="10" rx="1.5"/><path d="M6 3.5V3a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 10 3v.5"/><path d="M6 7.5h4M6 10h4"/></svg></i><span class="nv-txt" data-i="项目管理">项目管理</span></a>
+        <a id="nav-files" href="#/files"><i class="nv-ico" aria-hidden="true"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.75 4.25a1.5 1.5 0 0 1 1.5-1.5h3.1L8 5h5.75a1.5 1.5 0 0 1 1.5 1.5v5.75a1.5 1.5 0 0 1-1.5 1.5H3.25a1.5 1.5 0 0 1-1.5-1.5Z"/><path d="M6 9.75h4"/></svg></i><span class="nv-txt" data-i="文件">文件</span></a>
+        <a id="nav-chat" href="#/chat"><i class="nv-ico" aria-hidden="true"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 11.5A1.5 1.5 0 0 1 11.5 13h-6L2 15.5V4a1.5 1.5 0 0 1 1.5-1.5h8A1.5 1.5 0 0 1 13 4Z"/></svg></i><span class="nv-txt" data-i="牛马对话">牛马对话</span><span class="nav-badge" id="nav-chat-badge" hidden></span></a>
+        <a id="nav-term" href="#/term"><i class="nv-ico" aria-hidden="true"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.8" width="12.4" height="10.4" rx="1.6"/><path d="M4.5 6.2 6.4 8l-1.9 1.8"/><path d="M8.4 10h3"/></svg></i><span class="nv-txt" data-i="终端">终端</span></a>
+        <a id="nav-assistant" href="#/assistant"><i class="nv-ico" aria-hidden="true"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="10" height="7.5" rx="1.8"/><path d="M8 5.5V3.2"/><circle cx="8" cy="2.2" r=".8"/><path d="M5.8 9h.01M10.2 9h.01"/><path d="M6.6 11.5h2.8"/><path d="M1.5 8.5v2.5M14.5 8.5v2.5"/></svg></i><span class="nv-txt" data-i="小助手">小助手</span></a>
+        <a id="nav-kb" href="#/kb"><i class="nv-ico" aria-hidden="true"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6.2C7 4.9 5.5 4.3 3.5 4.3h-2v8.4h2c2 0 3.5.6 4.5 1.9 1-1.3 2.5-1.9 4.5-1.9h2V4.3h-2c-2 0-3.5.6-4.5 1.9Z"/><path d="M8 6.2v8.4"/></svg></i><span class="nv-txt" data-i="办公室黑板">办公室黑板</span></a>
+      </nav>
+    </section>
+    <section class="grow">
+      <div id="member-head-row">
+        <h2 id="member-head" data-i="在线牛马">在线牛马</h2>
+        <input id="member-search" class="input" type="search" placeholder="搜索" autocomplete="off" aria-label="搜索牛马名字" data-i-ph="搜索" data-i-aria="搜索牛马名字">
+      </div>
+      <div id="member-list"><div class="member empty" data-i="连接中…">连接中…</div></div>
+    </section>
+    <section id="identity">
+      <div id="ident-row">
+        <button id="owner-card" type="button" title="查看我的牛马页" data-i-title="查看我的牛马页" hidden></button>
+        <button id="side-usage" type="button" title="耗粮统计" aria-label="耗粮统计" aria-haspopup="dialog" data-i-title="耗粮统计" data-i-aria="耗粮统计"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 13.5V9"/><path d="M6.5 13.5V5.5"/><path d="M10.5 13.5V7.5"/><path d="M14 2.8 9.6 5.2l1.2 2.1 4.4-2.4z" fill="none"/><path d="M1.5 13.5h13"/></svg></button>
+        <button id="side-settings" type="button" title="设置" aria-label="设置" aria-haspopup="dialog" data-i-title="设置" data-i-aria="设置"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="3.8"/><circle cx="8" cy="8" r="1.3"/><path d="M8 1.5v1.7M8 12.8v1.7M1.5 8h1.7M12.8 8h1.7M3.4 3.4l1.2 1.2M11.4 11.4l1.2 1.2M12.6 3.4l-1.2 1.2M4.6 11.4l-1.2 1.2"/></svg></button>
+      </div>
+      <div id="owner-miss" class="fb-notice fb-warning" hidden>
+        <span class="fb-n-ico" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2.6 14 13H2z" stroke-linejoin="round"/><path d="M8 6.4v3" stroke-linecap="round"/><circle cx="8" cy="11.2" r=".9" fill="currentColor" stroke="none"/></svg></span>
+        <div class="fb-n-main"><span data-i="未识别房主（/kb/people 无 local:true）——只读模式，发言与管理操作不可用">未识别房主（/kb/people 无 local:true）——只读模式，发言与管理操作不可用</span></div>
+      </div>
+    </section>
+  </aside>
+  <main id="main">
+    <!-- 各板块自有头；顶部导航簇见 body 首处的 #titlebar-tools（与红黄绿同排） -->
+    <div id="boards">
+      <div class="board" id="board-room" hidden>
+        <div id="room-stage">
+          <canvas id="room-canvas"></canvas>
+          <div id="room-hud"></div><!-- 插件挂件位（v3 形态 B）：办公室画板左上浮层，随板块显隐 -->
+          <button id="room-cam-reset" title="复位观察缩放（快捷键 0）" data-i-title="复位观察缩放（快捷键 0）" data-i="复位" hidden>复位</button><!-- t_158 补：框外角标钮，离家才现身 -->
+        </div>
+      </div>
+      <div class="board" id="board-people" hidden></div>
+      <div class="board" id="board-project" hidden></div>
+      <div class="board" id="board-files" hidden></div>
+      <div class="board" id="board-term" hidden></div>
+      <div class="board" id="board-assistant" hidden></div>
+      <div class="board" id="board-kb" hidden></div>
+      <div class="board" id="board-chat">
+        <div id="chat-layout">
+          <div id="chat-main">
+            <div id="chat-head">
+              <span class="avatar ch-avatar" id="chat-head-avatar" style="background:#8a9186">？</span>
+              <div class="ch-id">
+                <span class="ch-name" id="chat-head-name">—</span>
+                <span class="ch-meta" id="chat-head-meta"></span>
+              </div>
+              <button type="button" id="chat-head-pin" title="群公告" data-i-title="群公告" hidden><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.5 13.5 3v8L2.5 9Z"/><path d="M5.2 9.3v1.7a1.5 1.5 0 0 0 1.5 1.5h.6"/><path d="M13.5 5.2a2.3 2.3 0 0 1 0 3.6"/></svg></button>
+              <span class="ch-state" id="chat-head-state" data-mode="connecting" data-i="连接中…">连接中…</span>
+              <input id="chat-search" class="input" type="search" placeholder="搜索本办公室消息" autocomplete="off" data-i-ph="搜索本办公室消息">
+              <button id="stream-back" type="button" hidden title="回到跳转前的读位" data-i-title="回到跳转前的读位"></button>
+            </div>
+            <div id="stream"></div>
+            <div id="work-hint" hidden aria-live="polite"></div>
+            <div id="composer">
+              <button id="stream-pill" type="button" hidden></button>
+              <button id="stream-jump" type="button" hidden title="回到最新消息" data-i-title="回到最新消息"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2.5V12"/><path d="m4.5 8.5 3.5 3.5 3.5-3.5"/></svg></button>
+              <div id="composer-quote" hidden>
+                <span class="q-ico"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4 3 7l3 3"/><path d="M3 7h8.5A3.5 3.5 0 0 1 15 10.5V13"/></svg></span><span class="q-text"></span>
+                <button type="button" class="icon-btn" data-quote-x title="取消引用" data-i-title="取消引用"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+              </div>
+              <div id="composer-shell">
+                <div id="mention-pick" hidden></div>
+                <div id="emoji-pick" hidden></div>
+                <textarea id="composer-input" rows="2" placeholder="发言，@成员 / @所有人 / @全员 / @岗位组 派活；Enter 发送，Shift+Enter 换行" data-i-ph="发言，@成员 / @所有人 / @全员 / @岗位组 派活；Enter 发送，Shift+Enter 换行"></textarea>
+                <div id="composer-thumbs" hidden></div>
+                <div id="composer-bar">
+                  <button type="button" class="cbar-btn" id="composer-outdent" title="减少缩进（Shift+Tab）" data-i-title="减少缩进（Shift+Tab）"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 8H3"/><path d="M6.5 4.5 3 8l3.5 3.5"/></svg></button>
+                  <button type="button" class="cbar-btn" id="composer-indent" title="增加缩进（Tab）" data-i-title="增加缩进（Tab）"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10"/><path d="M9.5 4.5 13 8l-3.5 3.5"/></svg></button>
+                  <button type="button" class="cbar-btn" id="composer-at" title="@ 成员 / 所有人 / 岗位组" data-i-title="@ 成员 / 所有人 / 岗位组">@</button>
+                  <button type="button" class="cbar-btn" id="composer-image" title="发送图片（可粘贴 / 拖入截图）" data-i-title="发送图片（可粘贴 / 拖入截图）"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="2"/><circle cx="5.8" cy="6.6" r="1.1"/><path d="m6 11 2.6-2.6c.5-.5 1.3-.5 1.8 0L14 12"/></svg></button>
+                  <button type="button" class="cbar-btn" id="composer-emoji" title="表情" data-i-title="表情"><svg class="ico" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M5.6 9.4c.6 1.1 1.4 1.7 2.4 1.7s1.8-.6 2.4-1.7"/><path d="M5.8 6.2h.01M10.2 6.2h.01"/></svg></button>
+                  <span id="composer-status"></span>
+                  <span id="composer-count" hidden></span>
+                  <button id="composer-send" type="button" data-i="发送">发送</button>
+                </div>
+                <input type="file" id="composer-file" accept="image/png,image/jpeg,image/gif,image/webp,image/bmp" multiple hidden>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div id="bubble-overlay" hidden>
+    <div class="bo-card">
+      <div class="bo-head"><span class="bo-who"></span><button type="button" class="fb-x bo-x" aria-label="关闭" data-i-aria="关闭"></button></div>
+      <div class="bo-body"></div>
+    </div>
+  </div>
+  <div id="img-overlay" hidden><img alt=""></div>
+  <script type="module">
+    // r_32 分享页入口：/dayreplay/{key}?t=&date= 走轻量 boot（只起办公
+    // 室回放播放器，无房间流无写面），其余照旧进主应用。
+    if (location.pathname.startsWith('/dayreplay/')) {
+      const m = await import('/app/ui/dayreplay.js');
+      m.main();
+    } else {
+      await import('/app/app.js');
+    }
+  </script>
+</body>
+</html>

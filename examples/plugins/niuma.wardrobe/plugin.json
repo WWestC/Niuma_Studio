@@ -1,0 +1,12 @@
+{
+  "id": "niuma.wardrobe",
+  "name": "传说衣橱·示例",
+  "version": "0.1.0",
+  "desc": "两抹新发色＋两款新发型——形态 A 数据插件的最小样例",
+  "author": "Niuma 示例",
+  "engine": ">=1.0",
+  "permissions": ["wardrobe"],
+  "contributes": {
+    "wardrobe": ["wardrobe.json"]
+  }
+}

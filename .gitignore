@@ -1,0 +1,36 @@
+# binaries
+niuma
+niuma.exe
+niuma_*.exe
+dh_*.exe
+*.exe~
+Niuma_Studio.app/
+Niuma_Studio
+dh-run
+/icongen
+
+# windows icon resource intermediate (build.bat / build.sh regenerate:
+# icongen -ico → windres app.rc → this .syso, auto-linked by go build)
+/rsrc_windows_amd64.syso
+
+# debug screenshots (DH_SHOT output)
+shots*/
+gui-test-screenshots/
+docs/cap_*.png
+ui_check_*.png
+
+# runtime logs
+*.log
+
+# zcode session files
+.zcode/
+
+# go
+*.test
+*.out
+
+# macOS
+.DS_Store
+
+# 插件市场官方源：独立仓库（自带 .git，推送至 github.com/WWestC/niuma-market），不入主仓
+/niuma-market/

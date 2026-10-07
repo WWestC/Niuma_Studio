@@ -1,0 +1,42 @@
+{
+  "id": "niuma.theme-neon",
+  "name": "霓虹夜",
+  "version": "0.1.0",
+  "desc": "暗夜霓虹调色板——形态 A 主题插件的最小样例（纯 manifest，零代码）",
+  "author": "Niuma 示例",
+  "engine": ">=1.0",
+  "contributes": {
+    "themes": [
+      {
+        "id": "neon",
+        "name": "霓虹夜",
+        "vars": {
+          "--titlebar": "#10141a",
+          "--board": "#151b22",
+          "--board-1": "#121820",
+          "--board-2": "#0f141b",
+          "--board-3": "#1a222b",
+          "--chalk": "#d9e2ea",
+          "--chalk-dim": "#8fa0ad",
+          "--chalk-faint": "#66737f",
+          "--chalk-off": "#4a545e",
+          "--line": "#232c36",
+          "--line-2": "#2a343f",
+          "--line-hi": "#3a4652",
+          "--hover": "rgba(217,226,234,.05)",
+          "--hover-msg": "rgba(217,226,234,.1)",
+          "--active": "rgba(0,229,255,.08)",
+          "--gold": "#00e5ff",
+          "--gold-deep": "#4defff",
+          "--gold-dim": "rgba(0,229,255,.12)",
+          "--blue": "#00e5ff",
+          "--bubble": "#1b232c",
+          "--bubble-me": "rgba(0,229,255,.12)",
+          "--sw-off": "#3a4652",
+          "--disable-fill": "#1d242c",
+          "--bad-dim": "#2a1a1a"
+        }
+      }
+    ]
+  }
+}

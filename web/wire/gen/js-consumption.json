@@ -1,0 +1,1030 @@
+{
+ "_meta": {
+  "task": "t_140",
+  "req": "r_36",
+  "method": "四档消费形态（点访问/解构/JSDoc/出站body）+ 三级意图判据",
+  "known_infra": "web/wire/contract.test.js 9项（帧词汇表已双端钉——本底稿不重扫帧常量面）"
+ },
+ "ws": {
+  "frameKeys": [
+   "Agent",
+   "Bye",
+   "Git",
+   "Hello",
+   "Join",
+   "Kb",
+   "Leave",
+   "McpEvt",
+   "Meeting",
+   "MemberWork",
+   "Merge",
+   "MergeAccept",
+   "MergeReject",
+   "Ping",
+   "Plan",
+   "PlanAccept",
+   "Rename",
+   "Report",
+   "Say",
+   "SkillEvt",
+   "System",
+   "Task",
+   "TaskArbitrate",
+   "TaskConfirm",
+   "TaskDecline",
+   "TaskUpdate",
+   "Welcome"
+  ],
+  "connCaseCount": 9,
+  "streamCaseCount": 15
+ },
+ "http": {
+  "total": 90,
+  "calls": [
+   {
+    "path": "/",
+    "apiLines": [
+     74
+    ],
+    "variants": [
+     "/"
+    ]
+   },
+   {
+    "path": "/achieve/tests-green",
+    "apiLines": [
+     1347
+    ],
+    "variants": [
+     "/achieve/tests-green"
+    ]
+   },
+   {
+    "path": "/agents{key}",
+    "apiLines": [
+     175
+    ],
+    "variants": [
+     "/agents${archived ? '?archived=1' : ''}"
+    ]
+   },
+   {
+    "path": "/assistant",
+    "apiLines": [
+     646
+    ],
+    "variants": [
+     "/assistant"
+    ]
+   },
+   {
+    "path": "/assistant/ask",
+    "apiLines": [
+     657
+    ],
+    "variants": [
+     "/assistant/ask"
+    ]
+   },
+   {
+    "path": "/budget",
+    "apiLines": [
+     1337,
+     1357
+    ],
+    "variants": [
+     "/budget"
+    ]
+   },
+   {
+    "path": "/dispatch-wait",
+    "apiLines": [
+     1310,
+     1320
+    ],
+    "variants": [
+     "/dispatch-wait"
+    ]
+   },
+   {
+    "path": "/dispatch{key}",
+    "apiLines": [
+     214,
+     214
+    ],
+    "variants": [
+     "/dispatch${qs}"
+    ]
+   },
+   {
+    "path": "/dispatch/models",
+    "apiLines": [
+     683
+    ],
+    "variants": [
+     "/dispatch/models"
+    ]
+   },
+   {
+    "path": "/fs/ls?path={key}",
+    "apiLines": [
+     86
+    ],
+    "variants": [
+     "/fs/ls?path=${encodeURIComponent(path || '')}"
+    ]
+   },
+   {
+    "path": "/kb/capacity{key}",
+    "apiLines": [
+     1126
+    ],
+    "variants": [
+     "/kb/capacity${all ? '?all=1' : ''}"
+    ]
+   },
+   {
+    "path": "/kb/docs{key}",
+    "apiLines": [
+     1141,
+     1141
+    ],
+    "variants": [
+     "/kb/docs${tail}"
+    ]
+   },
+   {
+    "path": "/kb/docs/{key}{key}",
+    "apiLines": [
+     1153
+    ],
+    "variants": [
+     "/kb/docs/${key.split('/').map(encodeURIComponent).join('/')}${qs}"
+    ]
+   },
+   {
+    "path": "/kb/docs/{key}/history",
+    "apiLines": [
+     1162
+    ],
+    "variants": [
+     "/kb/docs/${key.split('/').map(encodeURIComponent).join('/')}/history"
+    ]
+   },
+   {
+    "path": "/kb/establishment",
+    "apiLines": [
+     203
+    ],
+    "variants": [
+     "/kb/establishment"
+    ]
+   },
+   {
+    "path": "/kb/people",
+    "apiLines": [
+     128
+    ],
+    "variants": [
+     "/kb/people"
+    ]
+   },
+   {
+    "path": "/kb/people/{key}",
+    "apiLines": [
+     139,
+     139
+    ],
+    "variants": [
+     "/kb/people/${encodeURIComponent(name)}"
+    ]
+   },
+   {
+    "path": "/kb/people/{key}/history",
+    "apiLines": [
+     151,
+     151
+    ],
+    "variants": [
+     "/kb/people/${encodeURIComponent(name)}/history"
+    ]
+   },
+   {
+    "path": "/kb/tasks",
+    "apiLines": [
+     193
+    ],
+    "variants": [
+     "/kb/tasks"
+    ]
+   },
+   {
+    "path": "/kb/tasks?assignee={key}",
+    "apiLines": [
+     184,
+     184
+    ],
+    "variants": [
+     "/kb/tasks?assignee=${encodeURIComponent(assignee)}"
+    ]
+   },
+   {
+    "path": "/kb/tasks/{key}{key}",
+    "apiLines": [
+     164,
+     164
+    ],
+    "variants": [
+     "/kb/tasks/${encodeURIComponent(id)}${q}"
+    ]
+   },
+   {
+    "path": "/lang",
+    "apiLines": [
+     1401,
+     1412
+    ],
+    "variants": [
+     "/lang"
+    ]
+   },
+   {
+    "path": "/mcps",
+    "apiLines": [
+     259
+    ],
+    "variants": [
+     "/mcps"
+    ]
+   },
+   {
+    "path": "/mcps/{key}",
+    "apiLines": [
+     269,
+     774,
+     789,
+     269,
+     774,
+     789
+    ],
+    "variants": [
+     "/mcps/${encodeURIComponent(key)}"
+    ]
+   },
+   {
+    "path": "/media?name={key}",
+    "apiLines": [
+     1578,
+     1578
+    ],
+    "variants": [
+     "/media?name=${encodeURIComponent(nm)}"
+    ]
+   },
+   {
+    "path": "/offboard",
+    "apiLines": [
+     1173
+    ],
+    "variants": [
+     "/offboard"
+    ]
+   },
+   {
+    "path": "/p/{key}/acks",
+    "apiLines": [
+     916,
+     916
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/acks"
+    ]
+   },
+   {
+    "path": "/p/{key}/autopilot",
+    "apiLines": [
+     1429,
+     1457,
+     1429,
+     1457
+    ],
+    "variants": [
+     "/p/${key}/autopilot"
+    ]
+   },
+   {
+    "path": "/p/{key}/delete",
+    "apiLines": [
+     1250,
+     1250
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/delete"
+    ]
+   },
+   {
+    "path": "/p/{key}/dismiss",
+    "apiLines": [
+     1210,
+     1210
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/dismiss"
+    ]
+   },
+   {
+    "path": "/p/{key}/establishment",
+    "apiLines": [
+     304,
+     337,
+     304,
+     337
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/establishment"
+    ]
+   },
+   {
+    "path": "/p/{key}/fs/file?path={key}",
+    "apiLines": [
+     453,
+     453
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/fs/file?path=${encodeURIComponent(path)}"
+    ]
+   },
+   {
+    "path": "/p/{key}/fs/search?q={key}",
+    "apiLines": [
+     465,
+     465
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/fs/search?q=${encodeURIComponent(q)}"
+    ]
+   },
+   {
+    "path": "/p/{key}/fs/tree?path={key}",
+    "apiLines": [
+     441,
+     441
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/fs/tree?path=${encodeURIComponent(path)}"
+    ]
+   },
+   {
+    "path": "/p/{key}/git",
+    "apiLines": [
+     480,
+     480
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/auth",
+    "apiLines": [
+     549,
+     549
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/auth"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/bind",
+    "apiLines": [
+     582,
+     582
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/bind"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/branch",
+    "apiLines": [
+     574,
+     574
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/branch"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/branches",
+    "apiLines": [
+     488,
+     488
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/branches"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/checkout",
+    "apiLines": [
+     566,
+     566
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/checkout"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/fetch",
+    "apiLines": [
+     522,
+     522
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/fetch"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/graph?n={key}",
+    "apiLines": [
+     517,
+     517
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/graph?n=${n}"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/hook",
+    "apiLines": [
+     609,
+     609
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/hook"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/init",
+    "apiLines": [
+     558,
+     558
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/init"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/log?{key}",
+    "apiLines": [
+     499,
+     499
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/log?${q}"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/policy",
+    "apiLines": [
+     595,
+     595
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/policy"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/pull",
+    "apiLines": [
+     540,
+     540
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/pull"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/push",
+    "apiLines": [
+     531,
+     531
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/push"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/req-activity?req={key}",
+    "apiLines": [
+     508,
+     508
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/req-activity?req=${encodeURIComponent(req)}"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/seat",
+    "apiLines": [
+     627,
+     627
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/seat"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/seat-cleanup",
+    "apiLines": [
+     635,
+     635
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/seat-cleanup"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/seats",
+    "apiLines": [
+     618,
+     618
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/seats"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/settings",
+    "apiLines": [
+     604,
+     604
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/settings"
+    ]
+   },
+   {
+    "path": "/p/{key}/git/unbind",
+    "apiLines": [
+     587,
+     587
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/git/unbind"
+    ]
+   },
+   {
+    "path": "/p/{key}/history{key}",
+    "apiLines": [
+     106,
+     106
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/history${qs}"
+    ]
+   },
+   {
+    "path": "/p/{key}/lifecycle",
+    "apiLines": [
+     828,
+     828
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/lifecycle"
+    ]
+   },
+   {
+    "path": "/p/{key}/meeting",
+    "apiLines": [
+     416,
+     416
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/meeting"
+    ]
+   },
+   {
+    "path": "/p/{key}/notice",
+    "apiLines": [
+     902,
+     902
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/notice"
+    ]
+   },
+   {
+    "path": "/p/{key}/pause",
+    "apiLines": [
+     1474,
+     1486,
+     1474,
+     1486
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/pause"
+    ]
+   },
+   {
+    "path": "/p/{key}/plan",
+    "apiLines": [
+     392,
+     392
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/plan"
+    ]
+   },
+   {
+    "path": "/p/{key}/questions",
+    "apiLines": [
+     963,
+     963
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/questions"
+    ]
+   },
+   {
+    "path": "/p/{key}/reacts",
+    "apiLines": [
+     931,
+     931
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/reacts"
+    ]
+   },
+   {
+    "path": "/p/{key}/reads",
+    "apiLines": [
+     949,
+     949
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/reads"
+    ]
+   },
+   {
+    "path": "/p/{key}/rebuild-vote",
+    "apiLines": [
+     1502,
+     1516,
+     1502,
+     1516
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/rebuild-vote"
+    ]
+   },
+   {
+    "path": "/p/{key}/replay",
+    "apiLines": [
+     1040,
+     1040
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/replay"
+    ]
+   },
+   {
+    "path": "/p/{key}/replay?{key}",
+    "apiLines": [
+     1067
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/replay?${parts.join('&')}"
+    ]
+   },
+   {
+    "path": "/p/{key}/replay/days",
+    "apiLines": [
+     1077,
+     1077
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/replay/days"
+    ]
+   },
+   {
+    "path": "/p/{key}/replay/share",
+    "apiLines": [
+     1089,
+     1099,
+     1089,
+     1099
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/replay/share"
+    ]
+   },
+   {
+    "path": "/p/{key}/reqs",
+    "apiLines": [
+     347,
+     360,
+     347,
+     360
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/reqs"
+    ]
+   },
+   {
+    "path": "/p/{key}/reqs/{key}",
+    "apiLines": [
+     377,
+     377
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/reqs/${encodeURIComponent(id)}"
+    ]
+   },
+   {
+    "path": "/p/{key}/reset",
+    "apiLines": [
+     1229,
+     1229
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/reset"
+    ]
+   },
+   {
+    "path": "/p/{key}/schedule",
+    "apiLines": [
+     403,
+     403
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/schedule"
+    ]
+   },
+   {
+    "path": "/p/{key}/staffing",
+    "apiLines": [
+     292,
+     292
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/staffing"
+    ]
+   },
+   {
+    "path": "/p/{key}/staffing/{key}/fabric",
+    "apiLines": [
+     281,
+     281
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/staffing/${encodeURIComponent(person)}/fabric"
+    ]
+   },
+   {
+    "path": "/p/{key}/tasks",
+    "apiLines": [
+     426,
+     426
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/tasks"
+    ]
+   },
+   {
+    "path": "/p/{key}/term{key}",
+    "apiLines": [
+     1014,
+     1014
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/term${q}"
+    ]
+   },
+   {
+    "path": "/p/{key}/trace{key}",
+    "apiLines": [
+     980,
+     980
+    ],
+    "variants": [
+     "/p/${encodeURIComponent(key)}/trace${q}"
+    ]
+   },
+   {
+    "path": "/projects",
+    "apiLines": [
+     47,
+     64,
+     804
+    ],
+    "variants": [
+     "/projects"
+    ]
+   },
+   {
+    "path": "/projects/preflight",
+    "apiLines": [
+     817
+    ],
+    "variants": [
+     "/projects/preflight"
+    ]
+   },
+   {
+    "path": "/rebuild",
+    "apiLines": [
+     1269
+    ],
+    "variants": [
+     "/rebuild"
+    ]
+   },
+   {
+    "path": "/reset",
+    "apiLines": [
+     1191
+    ],
+    "variants": [
+     "/reset"
+    ]
+   },
+   {
+    "path": "/retention",
+    "apiLines": [
+     1284,
+     1294
+    ],
+    "variants": [
+     "/retention"
+    ]
+   },
+   {
+    "path": "/reveal",
+    "apiLines": [
+     1374,
+     1386
+    ],
+    "variants": [
+     "/reveal"
+    ]
+   },
+   {
+    "path": "/skills",
+    "apiLines": [
+     223
+    ],
+    "variants": [
+     "/skills"
+    ]
+   },
+   {
+    "path": "/skills/{key}",
+    "apiLines": [
+     232,
+     743,
+     760,
+     232,
+     743,
+     760
+    ],
+    "variants": [
+     "/skills/${encodeURIComponent(key)}"
+    ]
+   },
+   {
+    "path": "/skills/authoring",
+    "apiLines": [
+     240,
+     250
+    ],
+    "variants": [
+     "/skills/authoring"
+    ]
+   },
+   {
+    "path": "/usage",
+    "apiLines": [
+     1606
+    ],
+    "variants": [
+     "/usage"
+    ]
+   },
+   {
+    "path": "/usage/turns?{key}",
+    "apiLines": [
+     1617,
+     1617
+    ],
+    "variants": [
+     "/usage/turns?${q}"
+    ]
+   },
+   {
+    "path": "/visitor",
+    "apiLines": [
+     1112
+    ],
+    "variants": [
+     "/visitor"
+    ]
+   },
+   {
+    "path": "/zcode",
+    "apiLines": [
+     118
+    ],
+    "variants": [
+     "/zcode"
+    ]
+   }
+  ]
+ },
+ "fields": {
+  "tagTotal": 195,
+  "zeroConsumed": {
+   "ghost": {
+    "goAnchor": "",
+    "verdict": "预留",
+    "note": "history.go:528 幽灵席位标记——消费方是 CLI 补位逻辑（cli.go:273 注释），浏览器不需要"
+   },
+   "deadline": {
+    "goAnchor": "",
+    "verdict": "预留",
+    "note": "history.go:529 注释「ms, ghosts only」——幽灵专属字段，前端无幽灵面"
+   },
+   "context_notes": {
+    "goAnchor": "",
+    "verdict": "预留",
+    "note": "修正（小牛 t_141 预判核实）：r_20 t_195 接续机制快照字段——Go 写入（port.go:314 DistillResumeNotes）且 dispatch/fleet.go:453 消费（服务端内部流转），wire 序列化但浏览器面不读。非死面。"
+   },
+   "wall": {
+    "goAnchor": "",
+    "verdict": "误报",
+    "note": "art.go:279 wallH 是 camelCase 前端消费（geom.wallH）——脚本小写正则漏驼峰"
+   },
+   "residue": {
+    "goAnchor": "",
+    "verdict": "预留",
+    "note": "art.go:422 食品残骸键（foods.json）——前端按 f.res 消费（缩写别名），非零消费"
+   },
+   "counts": {
+    "goAnchor": "",
+    "verdict": "预留",
+    "note": "autopilot.go:269 巡报统计——消费方是注入文本非 JSON 面"
+   },
+   "last_seq": {
+    "goAnchor": "",
+    "verdict": "疑似",
+    "note": "port.go:269 导出文件元数据——导入面在 CLI/房主侧"
+   },
+   "saved_at": {
+    "goAnchor": "",
+    "verdict": "疑似",
+    "note": "port.go:270 同上（导出对）"
+   },
+   "review_hours": {
+    "goAnchor": "",
+    "verdict": "预留",
+    "note": "reqs.go:186 parking 复查期（r_31）——写入面在 CLI park 命令，读面在 reqs CLI 列表 title"
+   },
+   "username": {
+    "goAnchor": "",
+    "verdict": "预留",
+    "note": "auth.go:233 hostgate 认证——服务面字段，浏览器不经认证路径"
+   },
+   "password": {
+    "goAnchor": "",
+    "verdict": "预留",
+    "note": "auth.go:234 同上"
+   },
+   "display_name": {
+    "goAnchor": "",
+    "verdict": "预留",
+    "note": "auth.go:335 同上"
+   },
+   "look": {
+    "goAnchor": "chat/hub.go:524 赋值；server/art.go:213-216 消费",
+    "verdict": "预留",
+    "note": "小猿 t_139 移交定性（小狐复核）：r_05 终身层投影字段——服务端消费（art.go 把 staffing Look 解析进 avatar spec 渲染），前端经 ?who= URL 间接受益不直接读字段。与 context_notes 同类：服务端内部消费形态。非死字段。"
+   }
+  },
+  "jsdocOnly": [
+   "replay",
+   "observer",
+   "proto",
+   "expect_rev",
+   "patch",
+   "approve",
+   "revised",
+   "merge_id",
+   "silent",
+   "doing_ts",
+   "done_ts",
+   "opening",
+   "conclusion",
+   "transcript"
+  ]
+ }
+}

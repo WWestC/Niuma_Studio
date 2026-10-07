@@ -1,0 +1,1727 @@
+{
+ "meta": {
+  "generated_by": "tools/wireaudit/go_baseline.py",
+  "ws_count": 59,
+  "http_count": 129,
+  "struct_count": 6
+ },
+ "ws": [
+  {
+   "const": "MsgHello",
+   "value": "hello",
+   "go": "wire/wire.go:33",
+   "direction": "C->S",
+   "comment": "C->S: {name, role} join request"
+  },
+  {
+   "const": "MsgSay",
+   "value": "say",
+   "go": "wire/wire.go:34",
+   "direction": "C->S",
+   "comment": "C->S: {text, images?, origin?}; S->C: {from,text,ts,images?,origin?}"
+  },
+  {
+   "const": "MsgReport",
+   "value": "report",
+   "go": "wire/wire.go:35",
+   "direction": "C->S",
+   "comment": "C->S: {text}; S->C: {from,text,ts} periodic task report"
+  },
+  {
+   "const": "MsgBye",
+   "value": "bye",
+   "go": "wire/wire.go:36",
+   "direction": "C->S",
+   "comment": "C->S: graceful leave"
+  },
+  {
+   "const": "MsgWelcome",
+   "value": "welcome",
+   "go": "wire/wire.go:37",
+   "direction": "S->C",
+   "comment": "S->C: {you, members}"
+  },
+  {
+   "const": "MsgJoin",
+   "value": "join",
+   "go": "wire/wire.go:38",
+   "direction": "S->C",
+   "comment": "S->C: {name}"
+  },
+  {
+   "const": "MsgLeave",
+   "value": "leave",
+   "go": "wire/wire.go:39",
+   "direction": "S->C",
+   "comment": "S->C: {name}"
+  },
+  {
+   "const": "MsgSystem",
+   "value": "system",
+   "go": "wire/wire.go:40",
+   "direction": "S->C",
+   "comment": "S->C: {text}"
+  },
+  {
+   "const": "MsgRename",
+   "value": "rename",
+   "go": "wire/wire.go:41",
+   "direction": "S->C",
+   "comment": "S->C: {from,to,text}: seat-collision dedup made visible (t_09)"
+  },
+  {
+   "const": "MsgMemberWork",
+   "value": "member_work",
+   "go": "wire/wire.go:42",
+   "direction": "S->C",
+   "comment": "S->C: {name,working,since}: the dispatcher's turn tell — reminder-family (no history, no badge, no @)"
+  },
+  {
+   "const": "MsgPing",
+   "value": "ping",
+   "go": "wire/wire.go:47",
+   "direction": "S->C",
+   "comment": "S->C observer-only: {ts} heartbeat keepalive. Browsers hide protocol ping/pong from JS, so the workbench's inbound watch"
+  },
+  {
+   "const": "MsgTaskCreate",
+   "value": "task_create",
+   "go": "wire/wire.go:110",
+   "direction": "C->S",
+   "comment": "C->S: {task:{title,desc,assignee}}"
+  },
+  {
+   "const": "MsgTaskUpdate",
+   "value": "task_update",
+   "go": "wire/wire.go:111",
+   "direction": "C->S",
+   "comment": "C->S: {task_id, patch}"
+  },
+  {
+   "const": "MsgTaskConfirm",
+   "value": "task_confirm",
+   "go": "wire/wire.go:112",
+   "direction": "C->S",
+   "comment": "C->S: {task_id}"
+  },
+  {
+   "const": "MsgTaskDecline",
+   "value": "task_decline",
+   "go": "wire/wire.go:113",
+   "direction": "C->S",
+   "comment": "C->S: {task_id}"
+  },
+  {
+   "const": "MsgTaskArbitrate",
+   "value": "task_arbitrate",
+   "go": "wire/wire.go:114",
+   "direction": "C->S",
+   "comment": "C->S: {task_id, approve} — 房主仲裁专属："
+  },
+  {
+   "const": "MsgTask",
+   "value": "task",
+   "go": "wire/wire.go:119",
+   "direction": "S->C",
+   "comment": "S->C: {event, task?, from, text, ts}"
+  },
+  {
+   "const": "MsgAgentSave",
+   "value": "agent_save",
+   "go": "wire/wire.go:124",
+   "direction": "C->S",
+   "comment": "C->S: {agent:{name,role,manual,prompt}} — upsert (D3)"
+  },
+  {
+   "const": "MsgAgent",
+   "value": "agent",
+   "go": "wire/wire.go:125",
+   "direction": "S->C",
+   "comment": "S->C: {event: saved, agent, from, ts}"
+  },
+  {
+   "const": "MsgKbWrite",
+   "value": "kb_write",
+   "go": "wire/wire.go:127",
+   "direction": "C->S",
+   "comment": "C->S: {doc:{key,title,body}}"
+  },
+  {
+   "const": "MsgKbAppend",
+   "value": "kb_append",
+   "go": "wire/wire.go:128",
+   "direction": "C->S",
+   "comment": "C->S: {key, text}"
+  },
+  {
+   "const": "MsgKbRestore",
+   "value": "kb_restore",
+   "go": "wire/wire.go:129",
+   "direction": "C->S",
+   "comment": "C->S: {key, rev}"
+  },
+  {
+   "const": "MsgKbArchive",
+   "value": "kb_archive",
+   "go": "wire/wire.go:130",
+   "direction": "C->S",
+   "comment": "C->S: {key} — 归档（房主/owner/rank≥owner，v3 治理）"
+  },
+  {
+   "const": "MsgKbUnarchive",
+   "value": "kb_unarchive",
+   "go": "wire/wire.go:131",
+   "direction": "C->S",
+   "comment": "C->S: {key} — 恢复（同上门）"
+  },
+  {
+   "const": "MsgKbDelete",
+   "value": "kb_delete",
+   "go": "wire/wire.go:132",
+   "direction": "C->S",
+   "comment": "C->S: {key} — 删除（仅房主）"
+  },
+  {
+   "const": "MsgKb",
+   "value": "kb",
+   "go": "wire/wire.go:133",
+   "direction": "S->C",
+   "comment": "S->C: {event: written|appended|restored|archived|unarchived|deleted|denied, doc?, from, ts}"
+  },
+  {
+   "const": "MsgSkillSave",
+   "value": "skill_save",
+   "go": "wire/wire.go:140",
+   "direction": "C->S",
+   "comment": "C->S: {skill:{key,name,desc,body,manuals}}"
+  },
+  {
+   "const": "MsgMCPSave",
+   "value": "mcp_save",
+   "go": "wire/wire.go:141",
+   "direction": "C->S",
+   "comment": "C->S: {mcp:{key,name,type,url,headers}}"
+  },
+  {
+   "const": "MsgAssemble",
+   "value": "assemble",
+   "go": "wire/wire.go:142",
+   "direction": "C->S",
+   "comment": "C->S: {project, person, target: staffing|profile, op: set|add|remove, skills, mcps}"
+  },
+  {
+   "const": "MsgSkillEvt",
+   "value": "skill",
+   "go": "wire/wire.go:143",
+   "direction": "S->C",
+   "comment": "S->C: {event: saved|removed|assembled|denied, skill?, project?, person?, skills?, mcps?, from, text, ts}"
+  },
+  {
+   "const": "MsgMcpEvt",
+   "value": "mcp",
+   "go": "wire/wire.go:144",
+   "direction": "S->C",
+   "comment": "S->C: {event: saved|removed|denied, mcp?, from, text, ts}"
+  },
+  {
+   "const": "MsgPlanSubmit",
+   "value": "plan_submit",
+   "go": "wire/wire.go:154",
+   "direction": "C->S",
+   "comment": "C->S: {plan:{title,need,req,project_key,version,tasks:[…]}}"
+  },
+  {
+   "const": "MsgPlanAccept",
+   "value": "plan_accept",
+   "go": "wire/wire.go:155",
+   "direction": "C->S",
+   "comment": "C->S: {plan_id, revised?} — host; revised = the entry-edited full plan"
+  },
+  {
+   "const": "MsgPlanReject",
+   "value": "plan_reject",
+   "go": "wire/wire.go:156",
+   "direction": "C->S",
+   "comment": "C->S: {plan_id} — host"
+  },
+  {
+   "const": "MsgPlan",
+   "value": "plan",
+   "go": "wire/wire.go:157",
+   "direction": "S->C",
+   "comment": "S->C: {event: submitted|accepted|rejected|superseded|denied, plan?, from, ts}"
+  },
+  {
+   "const": "MsgReqCreate",
+   "value": "req_create",
+   "go": "wire/wire.go:165",
+   "direction": "C->S",
+   "comment": "C->S: {req:{title, body}} (project rides hello)"
+  },
+  {
+   "const": "MsgReq",
+   "value": "req",
+   "go": "wire/wire.go:166",
+   "direction": "S->C",
+   "comment": "S->C: {event: created|deleted|denied, req?, from, text, ts} — private reply; created/deleted also broadcast to the room"
+  },
+  {
+   "const": "MsgAutopilotDone",
+   "value": "autopilot_done",
+   "go": "wire/wire.go:176",
+   "direction": "C->S",
+   "comment": "C->S: {text: 一句话结论}（project 骑 hello；发送者须为本房在编编排者）"
+  },
+  {
+   "const": "MsgAutopilot",
+   "value": "autopilot",
+   "go": "wire/wire.go:177",
+   "direction": "S->C",
+   "comment": "S->C: {event: completed|denied, from, text, ts} — private reply（房间侧只见 SystemRecorded 系统行）"
+  },
+  {
+   "const": "MsgPause",
+   "value": "pause",
+   "go": "wire/wire.go:188",
+   "direction": "S->C",
+   "comment": "S->C: {event: paused|resumed, from, ts}; welcome: {paused}"
+  },
+  {
+   "const": "MsgMeeting",
+   "value": "meeting",
+   "go": "wire/wire.go:199",
+   "direction": "S->C",
+   "comment": "S->C: {event: started|advanced|extended|ended, meeting?, ts}"
+  },
+  {
+   "const": "MsgMeetingEnd",
+   "value": "meeting_end",
+   "go": "wire/wire.go:212",
+   "direction": "C->S",
+   "comment": "C->S: {} (chair)"
+  },
+  {
+   "const": "MsgMeetingExtend",
+   "value": "meeting_extend",
+   "go": "wire/wire.go:213",
+   "direction": "C->S",
+   "comment": "C->S: {minutes} (chair)"
+  },
+  {
+   "const": "MsgNoticeSave",
+   "value": "notice_save",
+   "go": "wire/wire.go:225",
+   "direction": "C->S",
+   "comment": "C->S: {text, expect_rev?, silent?}"
+  },
+  {
+   "const": "MsgNotice",
+   "value": "notice",
+   "go": "wire/wire.go:226",
+   "direction": "S->C",
+   "comment": "S->C: {event: published|updated|cleared|denied, notice?, from, ts}"
+  },
+  {
+   "const": "MsgRead",
+   "value": "read",
+   "go": "wire/wire.go:236",
+   "direction": "S->C",
+   "comment": "S->C: {from, seqs, ts}"
+  },
+  {
+   "const": "MsgQueue",
+   "value": "queue",
+   "go": "wire/wire.go:249",
+   "direction": "S->C",
+   "comment": "S->C: {from, seqs, ts}"
+  },
+  {
+   "const": "MsgAck",
+   "value": "ack",
+   "go": "wire/wire.go:266",
+   "direction": "C->S",
+   "comment": "C->S: {seq}; S->C: {from, seqs, ts}"
+  },
+  {
+   "const": "MsgReact",
+   "value": "react",
+   "go": "wire/wire.go:281",
+   "direction": "C->S",
+   "comment": "C->S: {seq, emoji, on}; S->C: {from, seq, emoji, on}"
+  },
+  {
+   "const": "MsgQuestion",
+   "value": "question",
+   "go": "wire/wire.go:299",
+   "direction": "S->C",
+   "comment": "S->C: {qid, question, from, ts}"
+  },
+  {
+   "const": "MsgQuestionDone",
+   "value": "question_done",
+   "go": "wire/wire.go:300",
+   "direction": "S->C",
+   "comment": "S->C: {qid, qstatus: answered|expired, answer?, from, ts}"
+  },
+  {
+   "const": "MsgAnswer",
+   "value": "answer",
+   "go": "wire/wire.go:301",
+   "direction": "C->S",
+   "comment": "C->S: {qid, answer:{<问题>: <所选 label 或自填文本>}} — owner write face"
+  },
+  {
+   "const": "MsgTrace",
+   "value": "trace",
+   "go": "wire/wire.go:311",
+   "direction": "both/unknown",
+   "comment": "终端转录 (r_17): the hub's term journal flushes one batch of"
+  },
+  {
+   "const": "MsgTerm",
+   "value": "term",
+   "go": "wire/wire.go:322",
+   "direction": "S->C",
+   "comment": "版本管理事件流 (v2.8 gitflow)。MsgGit 的 S->C \"git\" 帧是提醒族广"
+  },
+  {
+   "const": "MsgGit",
+   "value": "git",
+   "go": "wire/wire.go:334",
+   "direction": "S->C",
+   "comment": "S->C: {event: commit, git?, from, ts}"
+  },
+  {
+   "const": "MsgMergeSubmit",
+   "value": "merge_submit",
+   "go": "wire/wire.go:335",
+   "direction": "C->S",
+   "comment": "C->S: {merge:{branch, into?, req?}}（project 骑 hello/project 槽）"
+  },
+  {
+   "const": "MsgMergeAccept",
+   "value": "merge_accept",
+   "go": "wire/wire.go:336",
+   "direction": "C->S",
+   "comment": "C->S: {merge_id, project?} — host"
+  },
+  {
+   "const": "MsgMergeReject",
+   "value": "merge_reject",
+   "go": "wire/wire.go:337",
+   "direction": "C->S",
+   "comment": "C->S: {merge_id, project?} — host"
+  },
+  {
+   "const": "MsgMerge",
+   "value": "merge",
+   "go": "wire/wire.go:338",
+   "direction": "S->C",
+   "comment": "S->C: {event, merge?, from, ts}"
+  }
+ ],
+ "http": [
+  {
+   "route": "/art/room-back.png",
+   "handler": "s.handleArtRoomBack",
+   "go": "server/art.go:94",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/art/room-fore.png",
+   "handler": "s.handleArtRoomFore",
+   "go": "server/art.go:95",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/art/chair.png",
+   "handler": "s.handleArtChair",
+   "go": "server/art.go:96",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/art/avatar.png",
+   "handler": "s.handleArtAvatar",
+   "go": "server/art.go:97",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/art/geom.json",
+   "handler": "s.handleArtGeom",
+   "go": "server/art.go:98",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/art/foods.json",
+   "handler": "s.handleArtFoods",
+   "go": "server/art.go:99",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/app",
+   "handler": "f.handleEntry",
+   "go": "server/web.go:95",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/app/",
+   "handler": "f.handleAsset",
+   "go": "server/web.go:96",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/app/__reload",
+   "handler": "f.handleReload",
+   "go": "server/web.go:98",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/auth/users",
+   "handler": "s.handleAuthUsers",
+   "go": "server/ws.go:344",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/auth/users/{name}",
+   "handler": "s.handleAuthUser",
+   "go": "server/ws.go:345",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/auth/users/{name}/role",
+   "handler": "s.handleAuthUserRole",
+   "go": "server/ws.go:346",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/auth/users/{name}/password",
+   "handler": "s.handleAuthUserPassword",
+   "go": "server/ws.go:347",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/auth/users/{name}/projects",
+   "handler": "s.handleAuthUserProjects",
+   "go": "server/ws.go:348",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/members",
+   "handler": "s.handleMembers",
+   "go": "server/ws.go:349",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/agents",
+   "handler": "s.handleAgents",
+   "go": "server/ws.go:350",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/agents/{name}/prompt",
+   "handler": "s.handleAgentPrompt",
+   "go": "server/ws.go:351",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/prompt",
+   "handler": "s.handlePrompt",
+   "go": "server/ws.go:352",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/kb",
+   "handler": "s.handleKBIndex",
+   "go": "server/ws.go:356",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/kb/manual",
+   "handler": "s.handleKBManual",
+   "go": "server/ws.go:357",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/usage",
+   "handler": "s.handleUsage",
+   "go": "server/ws.go:358",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/usage/turns",
+   "handler": "s.handleUsageTurns",
+   "go": "server/ws.go:359",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/kb/people",
+   "handler": "s.handleKBPeople",
+   "go": "server/ws.go:360",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/kb/capacity",
+   "handler": "s.handleKBCapacity",
+   "go": "server/ws.go:361",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/kb/people/{name}",
+   "handler": "s.handleKBPerson",
+   "go": "server/ws.go:362",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/kb/people/{name}/history",
+   "handler": "s.handleKBPersonHistory",
+   "go": "server/ws.go:363",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/kb/tasks",
+   "handler": "s.handleKBTasks",
+   "go": "server/ws.go:364",
+   "gated": true,
+   "consumer_hint": "both"
+  },
+  {
+   "route": "/kb/tasks/{id}",
+   "handler": "s.handleKBTask",
+   "go": "server/ws.go:365",
+   "gated": true,
+   "consumer_hint": "both"
+  },
+  {
+   "route": "/kb/tasks/{id}/brief",
+   "handler": "s.handleKBTaskBrief",
+   "go": "server/ws.go:366",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/kb/establishment",
+   "handler": "s.handleKBEstablishment",
+   "go": "server/ws.go:367",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/kb/establishment/row",
+   "handler": "s.roomopsFace().HandleKBEstablishmentRow",
+   "go": "server/ws.go:368",
+   "gated": true,
+   "consumer_hint": "both"
+  },
+  {
+   "route": "/kb/docs",
+   "handler": "s.handleKBDocsIndex",
+   "go": "server/ws.go:369",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/kb/docs/",
+   "handler": "s.handleKBDocs",
+   "go": "server/ws.go:370",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/history",
+   "handler": "s.handleProjectHistory",
+   "go": "server/ws.go:371",
+   "gated": true,
+   "consumer_hint": "both"
+  },
+  {
+   "route": "/p/{key}/reads",
+   "handler": "s.handleProjectReads",
+   "go": "server/ws.go:372",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/acks",
+   "handler": "s.handleProjectAcks",
+   "go": "server/ws.go:373",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/achieve/tests-green",
+   "handler": "s.handleTestsGreen",
+   "go": "server/ws.go:374",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/visitor",
+   "handler": "s.handleVisitorToggle",
+   "go": "server/ws.go:376",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/reacts",
+   "handler": "s.handleProjectReacts",
+   "go": "server/ws.go:377",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/questions",
+   "handler": "s.handleProjectQuestions",
+   "go": "server/ws.go:378",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/lifecycle",
+   "handler": "s.roomopsFace().HandleProjectLifecycle",
+   "go": "server/ws.go:379",
+   "gated": true,
+   "consumer_hint": "cli"
+  },
+  {
+   "route": "/p/{key}",
+   "handler": "s.roomopsFace().HandleProjectPatch",
+   "go": "server/ws.go:380",
+   "gated": true,
+   "consumer_hint": "cli(patch)"
+  },
+  {
+   "route": "/p/{key}/tasks",
+   "handler": "s.handleProjectTasks",
+   "go": "server/ws.go:381",
+   "gated": true,
+   "consumer_hint": "both"
+  },
+  {
+   "route": "/p/{key}/plan",
+   "handler": "s.handleProjectPlan",
+   "go": "server/ws.go:382",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/merge",
+   "handler": "s.gitFace().HandleProjectMerge",
+   "go": "server/ws.go:383",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/reqs",
+   "handler": "s.handleProjectReqs",
+   "go": "server/ws.go:384",
+   "gated": true,
+   "consumer_hint": "both"
+  },
+  {
+   "route": "/p/{key}/reqs/{id}",
+   "handler": "s.handleProjectReqDelete",
+   "go": "server/ws.go:385",
+   "gated": true,
+   "consumer_hint": "cli"
+  },
+  {
+   "route": "/p/{key}/reqs/{id}/park",
+   "handler": "s.handleProjectReqPark",
+   "go": "server/ws.go:386",
+   "gated": true,
+   "consumer_hint": "cli"
+  },
+  {
+   "route": "/p/{key}/reqs/{id}/unpark",
+   "handler": "s.handleProjectReqUnpark",
+   "go": "server/ws.go:387",
+   "gated": true,
+   "consumer_hint": "cli"
+  },
+  {
+   "route": "/p/{key}/meeting",
+   "handler": "s.handleProjectMeeting",
+   "go": "server/ws.go:388",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/notice",
+   "handler": "s.handleProjectNotice",
+   "go": "server/ws.go:389",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/schedule",
+   "handler": "s.handleProjectSchedule",
+   "go": "server/ws.go:390",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/staffing",
+   "handler": "s.handleProjectStaffing",
+   "go": "server/ws.go:391",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/establishment",
+   "handler": "s.roomopsFace().HandleProjectEstablishment",
+   "go": "server/ws.go:392",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/establishment/row",
+   "handler": "s.roomopsFace().HandleProjectEstablishmentRow",
+   "go": "server/ws.go:393",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git",
+   "handler": "s.gitFace().HandleGitSummary",
+   "go": "server/ws.go:394",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/git/branches",
+   "handler": "s.gitFace().HandleGitBranches",
+   "go": "server/ws.go:395",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/git/log",
+   "handler": "s.gitFace().HandleGitLog",
+   "go": "server/ws.go:396",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/git/graph",
+   "handler": "s.gitFace().HandleGitGraph",
+   "go": "server/ws.go:397",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/git/req-activity",
+   "handler": "s.gitFace().HandleGitReqActivity",
+   "go": "server/ws.go:398",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/git/fetch",
+   "handler": "s.gitFace().HandleGitFetch",
+   "go": "server/ws.go:399",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/push",
+   "handler": "s.gitFace().HandleGitPush",
+   "go": "server/ws.go:400",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/pull",
+   "handler": "s.gitFace().HandleGitPull",
+   "go": "server/ws.go:401",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/auth",
+   "handler": "s.gitFace().HandleGitAuth",
+   "go": "server/ws.go:402",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/init",
+   "handler": "s.gitFace().HandleGitInit",
+   "go": "server/ws.go:403",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/checkout",
+   "handler": "s.gitFace().HandleGitCheckout",
+   "go": "server/ws.go:404",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/branch",
+   "handler": "s.gitFace().HandleGitBranchNew",
+   "go": "server/ws.go:405",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/bind",
+   "handler": "s.gitFace().HandleGitBind",
+   "go": "server/ws.go:406",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/unbind",
+   "handler": "s.gitFace().HandleGitUnbind",
+   "go": "server/ws.go:407",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/policy",
+   "handler": "s.gitFace().HandleGitPolicy",
+   "go": "server/ws.go:408",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/settings",
+   "handler": "s.gitFace().HandleGitSettings",
+   "go": "server/ws.go:409",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/hook",
+   "handler": "s.gitFace().HandleGitHook",
+   "go": "server/ws.go:410",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/seats",
+   "handler": "s.gitFace().HandleGitSeats",
+   "go": "server/ws.go:411",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/git/seat",
+   "handler": "s.gitFace().HandleGitSeat",
+   "go": "server/ws.go:412",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/git/seat-cleanup",
+   "handler": "s.gitFace().HandleGitSeatCleanup",
+   "go": "server/ws.go:413",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/autopilot",
+   "handler": "s.handleProjectAutopilot",
+   "go": "server/ws.go:414",
+   "gated": true,
+   "consumer_hint": "both"
+  },
+  {
+   "route": "/p/{key}/pause",
+   "handler": "s.roomopsFace().HandleProjectPause",
+   "go": "server/ws.go:415",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/rebuild-vote",
+   "handler": "s.roomopsFace().HandleProjectRebuildVote",
+   "go": "server/ws.go:416",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/trace",
+   "handler": "s.handleProjectTrace",
+   "go": "server/ws.go:417",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/trace/file",
+   "handler": "s.handleProjectTraceFile",
+   "go": "server/ws.go:418",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/term",
+   "handler": "s.handleProjectTerm",
+   "go": "server/ws.go:419",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/term/file",
+   "handler": "s.handleProjectTermFile",
+   "go": "server/ws.go:420",
+   "gated": true,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/p/{key}/fs/tree",
+   "handler": "s.fsFace().Tree",
+   "go": "server/ws.go:421",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/fs/file",
+   "handler": "s.fsFace().File",
+   "go": "server/ws.go:422",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/fs/search",
+   "handler": "s.fsFace().Search",
+   "go": "server/ws.go:423",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/replay",
+   "handler": "s.handleReplayFrames",
+   "go": "server/ws.go:424",
+   "gated": true,
+   "consumer_hint": "web(房主页)"
+  },
+  {
+   "route": "/p/{key}/replay/days",
+   "handler": "s.handleReplayDays",
+   "go": "server/ws.go:425",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/replay/share",
+   "handler": "s.handleReplayShare",
+   "go": "server/ws.go:426",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/media",
+   "handler": "s.handleMediaUpload",
+   "go": "server/ws.go:428",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/offboard",
+   "handler": "s.roomopsFace().HandleOffboard",
+   "go": "server/ws.go:430",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/dismiss",
+   "handler": "s.roomopsFace().HandleProjectDismiss",
+   "go": "server/ws.go:431",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/reset",
+   "handler": "s.roomopsFace().HandleProjectReset",
+   "go": "server/ws.go:432",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/delete",
+   "handler": "s.roomopsFace().HandleProjectDelete",
+   "go": "server/ws.go:433",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/reset",
+   "handler": "s.roomopsFace().HandleReset",
+   "go": "server/ws.go:434",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/rebuild",
+   "handler": "s.roomopsFace().HandleRebuild",
+   "go": "server/ws.go:435",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/skills",
+   "handler": "s.skillsFace().HandleSkills",
+   "go": "server/ws.go:436",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/skills/authoring",
+   "handler": "s.skillsFace().HandleAuthoring",
+   "go": "server/ws.go:437",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/skills/{key}",
+   "handler": "s.skillsFace().HandleSkill",
+   "go": "server/ws.go:438",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/mcps",
+   "handler": "s.skillsFace().HandleMCPs",
+   "go": "server/ws.go:439",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/mcps/{key}",
+   "handler": "s.skillsFace().HandleMCP",
+   "go": "server/ws.go:440",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/p/{key}/staffing/{person}/fabric",
+   "handler": "s.skillsFace().HandleStaffingFabric",
+   "go": "server/ws.go:441",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/projects",
+   "handler": "s.roomopsFace().HandleProjects",
+   "go": "server/ws.go:442",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/projects/preflight",
+   "handler": "s.roomopsFace().HandleProjectPreflight",
+   "go": "server/ws.go:443",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/retention",
+   "handler": "s.roomopsFace().HandleRetention",
+   "go": "server/ws.go:444",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/dispatch-wait",
+   "handler": "s.handleSendWait",
+   "go": "server/ws.go:445",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/budget",
+   "handler": "s.handleBudget",
+   "go": "server/ws.go:446",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/reveal",
+   "handler": "s.handleReveal",
+   "go": "server/ws.go:447",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/lang",
+   "handler": "s.handleLang",
+   "go": "server/ws.go:448",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/owner/token",
+   "handler": "s.handleOwnerToken",
+   "go": "server/ws.go:449",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/fs/ls",
+   "handler": "s.fsFace().List",
+   "go": "server/ws.go:450",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/internal/git/commit",
+   "handler": "s.gitFace().HandleGitCommitNotify",
+   "go": "server/ws.go:451",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/market/index",
+   "handler": "s.skillsFace().HandleMarketIndex",
+   "go": "server/ws.go:465",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/market/install",
+   "handler": "s.skillsFace().HandleMarketInstall",
+   "go": "server/ws.go:466",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/market/enable",
+   "handler": "s.skillsFace().HandleMarketEnable",
+   "go": "server/ws.go:467",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/market/remove",
+   "handler": "s.skillsFace().HandleMarketRemove",
+   "go": "server/ws.go:468",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/ws",
+   "handler": "s.handleWS",
+   "go": "server/ws.go:339",
+   "gated": false,
+   "consumer_hint": "both"
+  },
+  {
+   "route": "/auth/login",
+   "handler": "s.handleAuthLogin",
+   "go": "server/ws.go:341",
+   "gated": false,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/auth/logout",
+   "handler": "s.handleAuthLogout",
+   "go": "server/ws.go:342",
+   "gated": false,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/auth/me",
+   "handler": "s.handleAuthMe",
+   "go": "server/ws.go:343",
+   "gated": false,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/zcode",
+   "handler": "s.handleZCode",
+   "go": "server/ws.go:354",
+   "gated": false,
+   "consumer_hint": "web"
+  },
+  {
+   "route": "/view/{project}",
+   "handler": "s.handleView",
+   "go": "server/ws.go:375",
+   "gated": false,
+   "consumer_hint": "web(访客)"
+  },
+  {
+   "route": "/dayreplay/{project}",
+   "handler": "s.handleDayReplayPage",
+   "go": "server/ws.go:427",
+   "gated": false,
+   "consumer_hint": "web(分享页)"
+  },
+  {
+   "route": "/media/{id}",
+   "handler": "s.handleMediaGet",
+   "go": "server/ws.go:429",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/plugins.json",
+   "handler": "s.skillsFace().HandlePluginsIndex",
+   "go": "server/ws.go:463",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/plugins/",
+   "handler": "s.skillsFace().HandlePluginAsset",
+   "go": "server/ws.go:464",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/",
+   "handler": "s.handleInfo",
+   "go": "server/ws.go:475",
+   "gated": false,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/dispatch/",
+   "handler": "(faces)",
+   "go": "server/ws.go:453",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/assistant",
+   "handler": "(faces)",
+   "go": "server/ws.go:456",
+   "gated": true,
+   "consumer_hint": "unknown"
+  },
+  {
+   "route": "/assistant/",
+   "handler": "(faces)",
+   "go": "server/ws.go:457",
+   "gated": true,
+   "consumer_hint": "unknown"
+  }
+ ],
+ "structs": {
+  "tasks.Task": {
+   "go": "tasks/tasks.go:167",
+   "fields": [
+    {
+     "go_field": "ID",
+     "json": "id",
+     "omitempty": false
+    },
+    {
+     "go_field": "Title",
+     "json": "title",
+     "omitempty": false
+    },
+    {
+     "go_field": "Desc",
+     "json": "desc",
+     "omitempty": true
+    },
+    {
+     "go_field": "Assignee",
+     "json": "assignee",
+     "omitempty": true
+    },
+    {
+     "go_field": "Status",
+     "json": "status",
+     "omitempty": false,
+     "unit": "vocab: task=todo|doing|pending|done|cancelled / req=open|parking|split|closed（不同枚举！）"
+    },
+    {
+     "go_field": "Progress",
+     "json": "progress",
+     "omitempty": true,
+     "unit": "string（人类注记，如 96% · 差验收）"
+    },
+    {
+     "go_field": "CreatedBy",
+     "json": "created_by",
+     "omitempty": true
+    },
+    {
+     "go_field": "CreatedTS",
+     "json": "created_ts",
+     "omitempty": true,
+     "unit": "unix_s"
+    },
+    {
+     "go_field": "UpdatedTS",
+     "json": "updated_ts",
+     "omitempty": true,
+     "unit": "unix_s"
+    },
+    {
+     "go_field": "Log",
+     "json": "log",
+     "omitempty": true
+    },
+    {
+     "go_field": "Pending",
+     "json": "pending",
+     "omitempty": true
+    },
+    {
+     "go_field": "ProjectKey",
+     "json": "project_key",
+     "omitempty": true
+    },
+    {
+     "go_field": "Parent",
+     "json": "parent",
+     "omitempty": true
+    },
+    {
+     "go_field": "Req",
+     "json": "req",
+     "omitempty": true
+    },
+    {
+     "go_field": "Version",
+     "json": "version",
+     "omitempty": true
+    },
+    {
+     "go_field": "PlanID",
+     "json": "plan_id",
+     "omitempty": true
+    },
+    {
+     "go_field": "StartTS",
+     "json": "start_ts",
+     "omitempty": true,
+     "unit": "unix_s"
+    },
+    {
+     "go_field": "EndTS",
+     "json": "end_ts",
+     "omitempty": true,
+     "unit": "unix_s"
+    },
+    {
+     "go_field": "Deps",
+     "json": "deps",
+     "omitempty": true
+    },
+    {
+     "go_field": "Milestone",
+     "json": "milestone",
+     "omitempty": true
+    },
+    {
+     "go_field": "ProgressPct",
+     "json": "progress_pct",
+     "omitempty": true,
+     "unit": "int 0-100"
+    },
+    {
+     "go_field": "Priority",
+     "json": "priority",
+     "omitempty": true
+    },
+    {
+     "go_field": "DoingTS",
+     "json": "doing_ts",
+     "omitempty": true
+    },
+    {
+     "go_field": "DoneTS",
+     "json": "done_ts",
+     "omitempty": true
+    }
+   ]
+  },
+  "requirements.Req": {
+   "go": "requirements/requirements.go:57",
+   "fields": [
+    {
+     "go_field": "ID",
+     "json": "id",
+     "omitempty": false
+    },
+    {
+     "go_field": "ProjectKey",
+     "json": "project_key",
+     "omitempty": false
+    },
+    {
+     "go_field": "Title",
+     "json": "title",
+     "omitempty": false
+    },
+    {
+     "go_field": "Body",
+     "json": "body",
+     "omitempty": true
+    },
+    {
+     "go_field": "Status",
+     "json": "status",
+     "omitempty": false,
+     "unit": "vocab: task=todo|doing|pending|done|cancelled / req=open|parking|split|closed（不同枚举！）"
+    },
+    {
+     "go_field": "CreatedBy",
+     "json": "created_by",
+     "omitempty": true
+    },
+    {
+     "go_field": "CreatedTS",
+     "json": "created_ts",
+     "omitempty": true,
+     "unit": "unix_s"
+    },
+    {
+     "go_field": "ParkNote",
+     "json": "park_note",
+     "omitempty": true
+    },
+    {
+     "go_field": "ParkTS",
+     "json": "park_ts",
+     "omitempty": true,
+     "unit": "unix_s"
+    },
+    {
+     "go_field": "ReviewAfter",
+     "json": "review_after",
+     "omitempty": true,
+     "unit": "unix_s"
+    },
+    {
+     "go_field": "ClosedTS",
+     "json": "closed_ts",
+     "omitempty": true,
+     "unit": "unix_s"
+    }
+   ]
+  },
+  "wire.Member": {
+   "go": "wire/wire.go:361",
+   "fields": [
+    {
+     "go_field": "Name",
+     "json": "name",
+     "omitempty": false
+    },
+    {
+     "go_field": "Color",
+     "json": "color",
+     "omitempty": false
+    },
+    {
+     "go_field": "Hair",
+     "json": "hair",
+     "omitempty": false
+    },
+    {
+     "go_field": "Role",
+     "json": "role",
+     "omitempty": true
+    },
+    {
+     "go_field": "Look",
+     "json": "look",
+     "omitempty": true
+    },
+    {
+     "go_field": "LastReport",
+     "json": "last_report",
+     "omitempty": true
+    },
+    {
+     "go_field": "LastReportTS",
+     "json": "last_report_ts",
+     "omitempty": true,
+     "unit": "unix_s"
+    },
+    {
+     "go_field": "Working",
+     "json": "working",
+     "omitempty": true
+    },
+    {
+     "go_field": "WorkingSince",
+     "json": "working_since",
+     "omitempty": true,
+     "unit": "unix_s"
+    }
+   ]
+  },
+  "wire.Notice": {
+   "go": "wire/wire.go:787",
+   "fields": [
+    {
+     "go_field": "Content",
+     "json": "content",
+     "omitempty": false
+    },
+    {
+     "go_field": "By",
+     "json": "by",
+     "omitempty": true
+    },
+    {
+     "go_field": "TS",
+     "json": "ts",
+     "omitempty": true,
+     "unit": "unix_s"
+    },
+    {
+     "go_field": "Rev",
+     "json": "rev",
+     "omitempty": false
+    }
+   ]
+  },
+  "kb.PersonSummary": {
+   "go": "kb/kb.go:67",
+   "fields": [
+    {
+     "go_field": "Name",
+     "json": "name",
+     "omitempty": false
+    },
+    {
+     "go_field": "Role",
+     "json": "role",
+     "omitempty": true
+    },
+    {
+     "go_field": "Color",
+     "json": "color",
+     "omitempty": true
+    },
+    {
+     "go_field": "Hair",
+     "json": "hair",
+     "omitempty": true
+    },
+    {
+     "go_field": "Online",
+     "json": "online",
+     "omitempty": false
+    },
+    {
+     "go_field": "Grace",
+     "json": "grace",
+     "omitempty": true
+    },
+    {
+     "go_field": "Archived",
+     "json": "archived",
+     "omitempty": true
+    },
+    {
+     "go_field": "Local",
+     "json": "local",
+     "omitempty": true
+    },
+    {
+     "go_field": "HasPrompt",
+     "json": "has_prompt",
+     "omitempty": true
+    },
+    {
+     "go_field": "LastReport",
+     "json": "last_report",
+     "omitempty": true
+    },
+    {
+     "go_field": "LastReportTS",
+     "json": "last_report_ts",
+     "omitempty": true,
+     "unit": "unix_s"
+    },
+    {
+     "go_field": "Room",
+     "json": "room",
+     "omitempty": true
+    },
+    {
+     "go_field": "Working",
+     "json": "working",
+     "omitempty": true
+    },
+    {
+     "go_field": "WorkingSince",
+     "json": "working_since",
+     "omitempty": true,
+     "unit": "unix_s"
+    },
+    {
+     "go_field": "Rank",
+     "json": "rank",
+     "omitempty": false
+    },
+    {
+     "go_field": "TaskCount",
+     "json": "task_count",
+     "omitempty": true
+    },
+    {
+     "go_field": "TaskDoing",
+     "json": "task_doing",
+     "omitempty": true
+    }
+   ]
+  },
+  "staffing.Knobs": {
+   "go": "staffing/settings.go:106",
+   "fields": [
+    {
+     "go_field": "PokeEveryMin",
+     "json": "poke_every",
+     "omitempty": true
+    },
+    {
+     "go_field": "AcceptDelayS",
+     "json": "accept_delay",
+     "omitempty": true
+    },
+    {
+     "go_field": "StallDelayMin",
+     "json": "stall_delay",
+     "omitempty": true
+    },
+    {
+     "go_field": "MaxPlans",
+     "json": "max_plans",
+     "omitempty": true
+    },
+    {
+     "go_field": "WaterTarget",
+     "json": "water_target",
+     "omitempty": true
+    }
+   ]
+  }
+ }
+}

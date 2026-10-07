@@ -1,0 +1,1718 @@
+{
+  "generated_by": "go run ./tools/wiregen",
+  "source": "wire/*.go + server family Envelope (non-test)",
+  "frames": {
+    "CloseReasonSuperseded": "seat superseded by same token",
+    "EventAgg": "agg",
+    "EventInterrupted": "interrupted",
+    "EventRebuild": "rebuild",
+    "LobbyKey": "default",
+    "MsgAck": "ack",
+    "MsgAgent": "agent",
+    "MsgAgentSave": "agent_save",
+    "MsgAnswer": "answer",
+    "MsgAssemble": "assemble",
+    "MsgAutopilot": "autopilot",
+    "MsgAutopilotDone": "autopilot_done",
+    "MsgBye": "bye",
+    "MsgFsDirty": "fs_dirty",
+    "MsgGit": "git",
+    "MsgHello": "hello",
+    "MsgJoin": "join",
+    "MsgKb": "kb",
+    "MsgKbAppend": "kb_append",
+    "MsgKbArchive": "kb_archive",
+    "MsgKbDelete": "kb_delete",
+    "MsgKbRestore": "kb_restore",
+    "MsgKbUnarchive": "kb_unarchive",
+    "MsgKbWrite": "kb_write",
+    "MsgLeave": "leave",
+    "MsgMCPSave": "mcp_save",
+    "MsgMcpEvt": "mcp",
+    "MsgMeeting": "meeting",
+    "MsgMeetingEnd": "meeting_end",
+    "MsgMeetingExtend": "meeting_extend",
+    "MsgMemberWork": "member_work",
+    "MsgMerge": "merge",
+    "MsgMergeAccept": "merge_accept",
+    "MsgMergeReject": "merge_reject",
+    "MsgMergeSubmit": "merge_submit",
+    "MsgNotice": "notice",
+    "MsgNoticeSave": "notice_save",
+    "MsgPause": "pause",
+    "MsgPing": "ping",
+    "MsgPlan": "plan",
+    "MsgPlanAccept": "plan_accept",
+    "MsgPlanReject": "plan_reject",
+    "MsgPlanSubmit": "plan_submit",
+    "MsgQuestion": "question",
+    "MsgQuestionDone": "question_done",
+    "MsgQueue": "queue",
+    "MsgReact": "react",
+    "MsgRead": "read",
+    "MsgRename": "rename",
+    "MsgReport": "report",
+    "MsgReq": "req",
+    "MsgReqCreate": "req_create",
+    "MsgSay": "say",
+    "MsgSkillEvt": "skill",
+    "MsgSkillSave": "skill_save",
+    "MsgSystem": "system",
+    "MsgTask": "task",
+    "MsgTaskArbitrate": "task_arbitrate",
+    "MsgTaskConfirm": "task_confirm",
+    "MsgTaskCreate": "task_create",
+    "MsgTaskDecline": "task_decline",
+    "MsgTaskUpdate": "task_update",
+    "MsgTerm": "term",
+    "MsgTrace": "trace",
+    "MsgWelcome": "welcome",
+    "OriginBridge": "bridge",
+    "OriginMirror": "mirror",
+    "OriginWhisper": "whisper",
+    "TraceAnswer": "answer",
+    "TraceAsk": "ask",
+    "TraceDraft": "draft",
+    "TraceError": "error",
+    "TraceInput": "input",
+    "TraceModel": "model",
+    "TraceSys": "sys",
+    "TraceThink": "think",
+    "TraceTool": "tool",
+    "TraceTurn": "turn"
+  },
+  "types": {
+    "AgentConfig": [
+      {
+        "field": "Name",
+        "tag": "name",
+        "type": "string"
+      },
+      {
+        "field": "Role",
+        "tag": "role,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Manual",
+        "tag": "manual,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Prompt",
+        "tag": "prompt,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Archived",
+        "tag": "archived,omitempty",
+        "type": "bool"
+      }
+    ],
+    "DiffLine": [
+      {
+        "field": "Kind",
+        "tag": "k",
+        "type": "string"
+      },
+      {
+        "field": "Text",
+        "tag": "t,omitempty",
+        "type": "string"
+      }
+    ],
+    "GitCommit": [
+      {
+        "field": "SHA",
+        "tag": "sha",
+        "type": "string"
+      },
+      {
+        "field": "Author",
+        "tag": "author,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Subject",
+        "tag": "subject,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Body",
+        "tag": "body,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Branch",
+        "tag": "branch,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "DateTS",
+        "tag": "date_ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "Files",
+        "tag": "files,omitempty",
+        "type": "[]GitFile"
+      },
+      {
+        "field": "Additions",
+        "tag": "additions,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Deletions",
+        "tag": "deletions,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Refs",
+        "tag": "refs,omitempty",
+        "type": "[]string"
+      }
+    ],
+    "GitFile": [
+      {
+        "field": "Path",
+        "tag": "path",
+        "type": "string"
+      },
+      {
+        "field": "Added",
+        "tag": "added,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Removed",
+        "tag": "removed,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Binary",
+        "tag": "binary,omitempty",
+        "type": "bool"
+      }
+    ],
+    "Image": [
+      {
+        "field": "ID",
+        "tag": "id",
+        "type": "string"
+      },
+      {
+        "field": "Name",
+        "tag": "name,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Mime",
+        "tag": "mime,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "W",
+        "tag": "w,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "H",
+        "tag": "h,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Bytes",
+        "tag": "bytes,omitempty",
+        "type": "int64"
+      }
+    ],
+    "InterruptedSeat": [
+      {
+        "field": "Name",
+        "tag": "name",
+        "type": "string"
+      },
+      {
+        "field": "Project",
+        "tag": "project,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Room",
+        "tag": "room,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Since",
+        "tag": "since,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "ContextNotes",
+        "tag": "context_notes,omitempty",
+        "type": "string"
+      }
+    ],
+    "KbDoc": [
+      {
+        "field": "Key",
+        "tag": "key,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Title",
+        "tag": "title,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Body",
+        "tag": "body,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Owner",
+        "tag": "owner,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "UpdatedBy",
+        "tag": "updated_by,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "UpdatedTS",
+        "tag": "updated_ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "Rev",
+        "tag": "rev,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Size",
+        "tag": "size,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Archived",
+        "tag": "archived,omitempty",
+        "type": "bool"
+      }
+    ],
+    "Line": [
+      {
+        "field": "TS",
+        "tag": "ts",
+        "type": "int64"
+      },
+      {
+        "field": "By",
+        "tag": "by",
+        "type": "string"
+      },
+      {
+        "field": "Text",
+        "tag": "text",
+        "type": "string"
+      }
+    ],
+    "LogEntry": [
+      {
+        "field": "TS",
+        "tag": "ts",
+        "type": "int64"
+      },
+      {
+        "field": "By",
+        "tag": "by",
+        "type": "string"
+      },
+      {
+        "field": "Note",
+        "tag": "note",
+        "type": "string"
+      }
+    ],
+    "Look": [
+      {
+        "field": "HairStyle",
+        "tag": "hair_style,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Skin",
+        "tag": "skin,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Accessories",
+        "tag": "accessories,omitempty",
+        "type": "[]LookAcc"
+      }
+    ],
+    "LookAcc": [
+      {
+        "field": "Slot",
+        "tag": "slot",
+        "type": "string"
+      },
+      {
+        "field": "Style",
+        "tag": "style,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Color",
+        "tag": "color,omitempty",
+        "type": "string"
+      }
+    ],
+    "MCPHeader": [
+      {
+        "field": "Name",
+        "tag": "name",
+        "type": "string"
+      },
+      {
+        "field": "Value",
+        "tag": "value",
+        "type": "string"
+      }
+    ],
+    "MCPServer": [
+      {
+        "field": "Key",
+        "tag": "key",
+        "type": "string"
+      },
+      {
+        "field": "Name",
+        "tag": "name,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Desc",
+        "tag": "desc,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Type",
+        "tag": "type,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "URL",
+        "tag": "url,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Headers",
+        "tag": "headers,omitempty",
+        "type": "[]MCPHeader"
+      },
+      {
+        "field": "CreatedBy",
+        "tag": "created_by,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "CreatedTS",
+        "tag": "created_ts,omitempty",
+        "type": "int64"
+      }
+    ],
+    "Meeting": [
+      {
+        "field": "ID",
+        "tag": "id",
+        "type": "string"
+      },
+      {
+        "field": "ProjectKey",
+        "tag": "project_key",
+        "type": "string"
+      },
+      {
+        "field": "ReqID",
+        "tag": "req,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "ReqTitle",
+        "tag": "req_title,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Chair",
+        "tag": "chair",
+        "type": "string"
+      },
+      {
+        "field": "Participants",
+        "tag": "participants,omitempty",
+        "type": "[]string"
+      },
+      {
+        "field": "Status",
+        "tag": "status",
+        "type": "string"
+      },
+      {
+        "field": "Phase",
+        "tag": "phase,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Opening",
+        "tag": "opening,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Conclusion",
+        "tag": "conclusion,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Transcript",
+        "tag": "transcript,omitempty",
+        "type": "[]Line"
+      },
+      {
+        "field": "StartTS",
+        "tag": "start_ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "EndTS",
+        "tag": "end_ts,omitempty",
+        "type": "int64"
+      }
+    ],
+    "Member": [
+      {
+        "field": "Name",
+        "tag": "name",
+        "type": "string"
+      },
+      {
+        "field": "Color",
+        "tag": "color",
+        "type": "string"
+      },
+      {
+        "field": "Hair",
+        "tag": "hair",
+        "type": "string"
+      },
+      {
+        "field": "Role",
+        "tag": "role,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Look",
+        "tag": "look,omitempty",
+        "type": "*Look"
+      },
+      {
+        "field": "LastReport",
+        "tag": "last_report,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "LastReportTS",
+        "tag": "last_report_ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "Working",
+        "tag": "working,omitempty",
+        "type": "bool"
+      },
+      {
+        "field": "WorkingSince",
+        "tag": "working_since,omitempty",
+        "type": "int64"
+      }
+    ],
+    "Merge": [
+      {
+        "field": "ID",
+        "tag": "id,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "ProjectKey",
+        "tag": "project_key,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Branch",
+        "tag": "branch",
+        "type": "string"
+      },
+      {
+        "field": "Into",
+        "tag": "into",
+        "type": "string"
+      },
+      {
+        "field": "Req",
+        "tag": "req,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Tasks",
+        "tag": "tasks,omitempty",
+        "type": "[]string"
+      },
+      {
+        "field": "Commits",
+        "tag": "commits,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Files",
+        "tag": "files,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Additions",
+        "tag": "additions,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Deletions",
+        "tag": "deletions,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "SubmittedBy",
+        "tag": "submitted_by,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "SubmittedTS",
+        "tag": "submitted_ts,omitempty",
+        "type": "int64"
+      }
+    ],
+    "Message": [
+      {
+        "field": "Type",
+        "tag": "type",
+        "type": "string"
+      },
+      {
+        "field": "Name",
+        "tag": "name,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Role",
+        "tag": "role,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Replay",
+        "tag": "replay,omitempty",
+        "type": "*bool"
+      },
+      {
+        "field": "Observer",
+        "tag": "observer,omitempty",
+        "type": "bool"
+      },
+      {
+        "field": "Project",
+        "tag": "project,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Visitor",
+        "tag": "visitor,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Force",
+        "tag": "force,omitempty",
+        "type": "bool"
+      },
+      {
+        "field": "From",
+        "tag": "from,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Text",
+        "tag": "text,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "TS",
+        "tag": "ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "To",
+        "tag": "to,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Working",
+        "tag": "working,omitempty",
+        "type": "bool"
+      },
+      {
+        "field": "Since",
+        "tag": "since,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "Seq",
+        "tag": "seq,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "Mentions",
+        "tag": "mentions,omitempty",
+        "type": "[]string"
+      },
+      {
+        "field": "Quote",
+        "tag": "quote,omitempty",
+        "type": "*Quote"
+      },
+      {
+        "field": "Images",
+        "tag": "images,omitempty",
+        "type": "[]Image"
+      },
+      {
+        "field": "Seqs",
+        "tag": "seqs,omitempty",
+        "type": "[]int64"
+      },
+      {
+        "field": "Emoji",
+        "tag": "emoji,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "On",
+        "tag": "on,omitempty",
+        "type": "bool"
+      },
+      {
+        "field": "QID",
+        "tag": "qid,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Question",
+        "tag": "question,omitempty",
+        "type": "*Question"
+      },
+      {
+        "field": "Answer",
+        "tag": "answer,omitempty",
+        "type": "map[string]string"
+      },
+      {
+        "field": "QStatus",
+        "tag": "qstatus,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Interrupted",
+        "tag": "interrupted,omitempty",
+        "type": "[]InterruptedSeat"
+      },
+      {
+        "field": "Origin",
+        "tag": "origin,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Member",
+        "tag": "member,omitempty",
+        "type": "*Member"
+      },
+      {
+        "field": "Paused",
+        "tag": "paused,omitempty",
+        "type": "bool"
+      },
+      {
+        "field": "Proto",
+        "tag": "proto,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Auth",
+        "tag": "auth,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "You",
+        "tag": "you,omitempty",
+        "type": "*Member"
+      },
+      {
+        "field": "Members",
+        "tag": "members,omitempty",
+        "type": "[]Member"
+      },
+      {
+        "field": "Task",
+        "tag": "task,omitempty",
+        "type": "*Task"
+      },
+      {
+        "field": "TaskID",
+        "tag": "task_id,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Patch",
+        "tag": "patch,omitempty",
+        "type": "*Patch"
+      },
+      {
+        "field": "Event",
+        "tag": "event,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Approve",
+        "tag": "approve,omitempty",
+        "type": "*bool"
+      },
+      {
+        "field": "KbDoc",
+        "tag": "doc,omitempty",
+        "type": "*KbDoc"
+      },
+      {
+        "field": "Key",
+        "tag": "key,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Rev",
+        "tag": "rev,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Diff",
+        "tag": "diff,omitempty",
+        "type": "[]DiffLine"
+      },
+      {
+        "field": "DiffMore",
+        "tag": "diff_more,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Token",
+        "tag": "token,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "CurrentRev",
+        "tag": "current_rev,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "ExpectRev",
+        "tag": "expect_rev,omitempty",
+        "type": "*int"
+      },
+      {
+        "field": "Agent",
+        "tag": "agent,omitempty",
+        "type": "*AgentConfig"
+      },
+      {
+        "field": "Skill",
+        "tag": "skill,omitempty",
+        "type": "*Skill"
+      },
+      {
+        "field": "Mcp",
+        "tag": "mcp,omitempty",
+        "type": "*MCPServer"
+      },
+      {
+        "field": "Person",
+        "tag": "person,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Target",
+        "tag": "target,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Skills",
+        "tag": "skills,omitempty",
+        "type": "[]string"
+      },
+      {
+        "field": "MCPServers",
+        "tag": "mcps,omitempty",
+        "type": "[]string"
+      },
+      {
+        "field": "Op",
+        "tag": "op,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Via",
+        "tag": "via,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Plan",
+        "tag": "plan,omitempty",
+        "type": "*Plan"
+      },
+      {
+        "field": "PlanID",
+        "tag": "plan_id,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Revised",
+        "tag": "revised,omitempty",
+        "type": "*Plan"
+      },
+      {
+        "field": "Merge",
+        "tag": "merge,omitempty",
+        "type": "*Merge"
+      },
+      {
+        "field": "MergeID",
+        "tag": "merge_id,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Git",
+        "tag": "git,omitempty",
+        "type": "*GitCommit"
+      },
+      {
+        "field": "Req",
+        "tag": "req,omitempty",
+        "type": "*Req"
+      },
+      {
+        "field": "Meeting",
+        "tag": "meeting,omitempty",
+        "type": "*Meeting"
+      },
+      {
+        "field": "Minutes",
+        "tag": "minutes,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Notice",
+        "tag": "notice,omitempty",
+        "type": "*Notice"
+      },
+      {
+        "field": "Silent",
+        "tag": "silent,omitempty",
+        "type": "bool"
+      },
+      {
+        "field": "Trace",
+        "tag": "trace,omitempty",
+        "type": "[]TraceEntry"
+      }
+    ],
+    "Notice": [
+      {
+        "field": "Content",
+        "tag": "content",
+        "type": "string"
+      },
+      {
+        "field": "By",
+        "tag": "by,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "TS",
+        "tag": "ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "Rev",
+        "tag": "rev",
+        "type": "int"
+      }
+    ],
+    "Patch": [
+      {
+        "field": "Status",
+        "tag": "status,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Progress",
+        "tag": "progress,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Note",
+        "tag": "note,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Assignee",
+        "tag": "assignee,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Project",
+        "tag": "project,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Version",
+        "tag": "version,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Start",
+        "tag": "start,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "End",
+        "tag": "end,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Deps",
+        "tag": "deps,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Milestone",
+        "tag": "milestone,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Pct",
+        "tag": "pct,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Priority",
+        "tag": "priority,omitempty",
+        "type": "string"
+      }
+    ],
+    "Plan": [
+      {
+        "field": "ID",
+        "tag": "id,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Req",
+        "tag": "req,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Title",
+        "tag": "title",
+        "type": "string"
+      },
+      {
+        "field": "Need",
+        "tag": "need,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "ProjectKey",
+        "tag": "project_key,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Version",
+        "tag": "version,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Tasks",
+        "tag": "tasks",
+        "type": "[]PlanTask"
+      },
+      {
+        "field": "SubmittedBy",
+        "tag": "submitted_by,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "SubmittedTS",
+        "tag": "submitted_ts,omitempty",
+        "type": "int64"
+      }
+    ],
+    "PlanTask": [
+      {
+        "field": "Title",
+        "tag": "title",
+        "type": "string"
+      },
+      {
+        "field": "Desc",
+        "tag": "desc,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Assignee",
+        "tag": "assignee,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "StartTS",
+        "tag": "start,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "EndTS",
+        "tag": "end,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "Deps",
+        "tag": "deps,omitempty",
+        "type": "[]int"
+      },
+      {
+        "field": "Milestone",
+        "tag": "milestone,omitempty",
+        "type": "bool"
+      }
+    ],
+    "Proposal": [
+      {
+        "field": "By",
+        "tag": "by",
+        "type": "string"
+      },
+      {
+        "field": "Patch",
+        "tag": "patch",
+        "type": "Patch"
+      },
+      {
+        "field": "Need",
+        "tag": "need",
+        "type": "[]string"
+      },
+      {
+        "field": "Got",
+        "tag": "got,omitempty",
+        "type": "[]string"
+      },
+      {
+        "field": "Kind",
+        "tag": "kind,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "TS",
+        "tag": "ts",
+        "type": "int64"
+      }
+    ],
+    "Question": [
+      {
+        "field": "ID",
+        "tag": "id",
+        "type": "string"
+      },
+      {
+        "field": "From",
+        "tag": "from",
+        "type": "string"
+      },
+      {
+        "field": "TS",
+        "tag": "ts",
+        "type": "int64"
+      },
+      {
+        "field": "Due",
+        "tag": "due,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "Prompt",
+        "tag": "prompt,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Asks",
+        "tag": "asks",
+        "type": "[]QuestionAsk"
+      }
+    ],
+    "QuestionAsk": [
+      {
+        "field": "Question",
+        "tag": "question",
+        "type": "string"
+      },
+      {
+        "field": "Header",
+        "tag": "header,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Multi",
+        "tag": "multi,omitempty",
+        "type": "bool"
+      },
+      {
+        "field": "Options",
+        "tag": "options,omitempty",
+        "type": "[]QuestionOption"
+      }
+    ],
+    "QuestionOption": [
+      {
+        "field": "Label",
+        "tag": "label",
+        "type": "string"
+      },
+      {
+        "field": "Desc",
+        "tag": "desc,omitempty",
+        "type": "string"
+      }
+    ],
+    "Quote": [
+      {
+        "field": "Seq",
+        "tag": "seq,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "From",
+        "tag": "from",
+        "type": "string"
+      },
+      {
+        "field": "At",
+        "tag": "at,omitempty",
+        "type": "bool"
+      },
+      {
+        "field": "Snip",
+        "tag": "snip,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Via",
+        "tag": "via,omitempty",
+        "type": "string"
+      }
+    ],
+    "Req": [
+      {
+        "field": "ID",
+        "tag": "id",
+        "type": "string"
+      },
+      {
+        "field": "ProjectKey",
+        "tag": "project_key",
+        "type": "string"
+      },
+      {
+        "field": "Title",
+        "tag": "title",
+        "type": "string"
+      },
+      {
+        "field": "Body",
+        "tag": "body,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Status",
+        "tag": "status",
+        "type": "string"
+      },
+      {
+        "field": "CreatedBy",
+        "tag": "created_by,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "CreatedTS",
+        "tag": "created_ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "ParkNote",
+        "tag": "park_note,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "ParkTS",
+        "tag": "park_ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "ReviewAfter",
+        "tag": "review_after,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "ClosedTS",
+        "tag": "closed_ts,omitempty",
+        "type": "int64"
+      }
+    ],
+    "Skill": [
+      {
+        "field": "Key",
+        "tag": "key",
+        "type": "string"
+      },
+      {
+        "field": "Name",
+        "tag": "name,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Desc",
+        "tag": "desc,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Body",
+        "tag": "body,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Manuals",
+        "tag": "manuals,omitempty",
+        "type": "[]string"
+      },
+      {
+        "field": "CreatedBy",
+        "tag": "created_by,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "CreatedTS",
+        "tag": "created_ts,omitempty",
+        "type": "int64"
+      }
+    ],
+    "Task": [
+      {
+        "field": "ID",
+        "tag": "id",
+        "type": "string"
+      },
+      {
+        "field": "Title",
+        "tag": "title",
+        "type": "string"
+      },
+      {
+        "field": "Desc",
+        "tag": "desc,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Assignee",
+        "tag": "assignee,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Status",
+        "tag": "status",
+        "type": "string"
+      },
+      {
+        "field": "Progress",
+        "tag": "progress,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "CreatedBy",
+        "tag": "created_by,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "CreatedTS",
+        "tag": "created_ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "UpdatedTS",
+        "tag": "updated_ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "Log",
+        "tag": "log,omitempty",
+        "type": "[]LogEntry"
+      },
+      {
+        "field": "Pending",
+        "tag": "pending,omitempty",
+        "type": "*Proposal"
+      },
+      {
+        "field": "ProjectKey",
+        "tag": "project_key,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Parent",
+        "tag": "parent,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Req",
+        "tag": "req,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Version",
+        "tag": "version,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "PlanID",
+        "tag": "plan_id,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "StartTS",
+        "tag": "start_ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "EndTS",
+        "tag": "end_ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "Deps",
+        "tag": "deps,omitempty",
+        "type": "[]string"
+      },
+      {
+        "field": "Milestone",
+        "tag": "milestone,omitempty",
+        "type": "bool"
+      },
+      {
+        "field": "ProgressPct",
+        "tag": "progress_pct,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Priority",
+        "tag": "priority,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "DoingTS",
+        "tag": "doing_ts,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "DoneTS",
+        "tag": "done_ts,omitempty",
+        "type": "int64"
+      }
+    ],
+    "TraceEntry": [
+      {
+        "field": "Seq",
+        "tag": "seq",
+        "type": "int64"
+      },
+      {
+        "field": "TS",
+        "tag": "ts",
+        "type": "int64"
+      },
+      {
+        "field": "From",
+        "tag": "from",
+        "type": "string"
+      },
+      {
+        "field": "Kind",
+        "tag": "kind",
+        "type": "string"
+      },
+      {
+        "field": "Agent",
+        "tag": "agent,omitempty",
+        "type": "bool"
+      },
+      {
+        "field": "AgentID",
+        "tag": "agent_id,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Text",
+        "tag": "text,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Src",
+        "tag": "src,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Call",
+        "tag": "call,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Tool",
+        "tag": "tool,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "State",
+        "tag": "state,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Input",
+        "tag": "input,omitempty",
+        "type": "any"
+      },
+      {
+        "field": "Output",
+        "tag": "output,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "OK",
+        "tag": "ok,omitempty",
+        "type": "*bool"
+      },
+      {
+        "field": "Ms",
+        "tag": "ms,omitempty",
+        "type": "int64"
+      },
+      {
+        "field": "Model",
+        "tag": "model,omitempty",
+        "type": "string"
+      },
+      {
+        "field": "Iter",
+        "tag": "iter,omitempty",
+        "type": "int"
+      },
+      {
+        "field": "Stop",
+        "tag": "stop,omitempty",
+        "type": "string"
+      }
+    ]
+  },
+  "envelope": [
+    {
+      "field": "Type",
+      "tag": "type",
+      "type": "string"
+    },
+    {
+      "field": "Text",
+      "tag": "text",
+      "type": "string"
+    },
+    {
+      "field": "Origin",
+      "tag": "origin,omitempty",
+      "type": "string"
+    },
+    {
+      "field": "Images",
+      "tag": "images,omitempty",
+      "type": "[]wire.Image"
+    },
+    {
+      "field": "Quote",
+      "tag": "quote,omitempty",
+      "type": "*chat.Quote"
+    },
+    {
+      "field": "Seq",
+      "tag": "seq,omitempty",
+      "type": "int64"
+    },
+    {
+      "field": "Emoji",
+      "tag": "emoji,omitempty",
+      "type": "string"
+    },
+    {
+      "field": "On",
+      "tag": "on,omitempty",
+      "type": "bool"
+    },
+    {
+      "field": "Task",
+      "tag": "task,omitempty",
+      "type": "*wire.Task"
+    },
+    {
+      "field": "TaskID",
+      "tag": "task_id,omitempty",
+      "type": "string"
+    },
+    {
+      "field": "Patch",
+      "tag": "patch,omitempty",
+      "type": "*wire.Patch"
+    },
+    {
+      "field": "Approve",
+      "tag": "approve,omitempty",
+      "type": "*bool"
+    },
+    {
+      "field": "Doc",
+      "tag": "doc,omitempty",
+      "type": "*chat.KbDoc"
+    },
+    {
+      "field": "Key",
+      "tag": "key,omitempty",
+      "type": "string"
+    },
+    {
+      "field": "Rev",
+      "tag": "rev,omitempty",
+      "type": "int"
+    },
+    {
+      "field": "ExpectRev",
+      "tag": "expect_rev,omitempty",
+      "type": "*int"
+    },
+    {
+      "field": "Agent",
+      "tag": "agent,omitempty",
+      "type": "*chat.AgentConfig"
+    },
+    {
+      "field": "Name",
+      "tag": "name,omitempty",
+      "type": "string"
+    },
+    {
+      "field": "Rank",
+      "tag": "rank,omitempty",
+      "type": "int"
+    },
+    {
+      "field": "Skill",
+      "tag": "skill,omitempty",
+      "type": "*chat.Skill"
+    },
+    {
+      "field": "Mcp",
+      "tag": "mcp,omitempty",
+      "type": "*chat.MCPServer"
+    },
+    {
+      "field": "Person",
+      "tag": "person,omitempty",
+      "type": "string"
+    },
+    {
+      "field": "Target",
+      "tag": "target,omitempty",
+      "type": "string"
+    },
+    {
+      "field": "Op",
+      "tag": "op,omitempty",
+      "type": "string"
+    },
+    {
+      "field": "Skills",
+      "tag": "skills,omitempty",
+      "type": "[]string"
+    },
+    {
+      "field": "MCPServers",
+      "tag": "mcps,omitempty",
+      "type": "[]string"
+    },
+    {
+      "field": "Project",
+      "tag": "project,omitempty",
+      "type": "string"
+    },
+    {
+      "field": "Via",
+      "tag": "via,omitempty",
+      "type": "string"
+    },
+    {
+      "field": "Plan",
+      "tag": "plan,omitempty",
+      "type": "*wire.Plan"
+    },
+    {
+      "field": "PlanID",
+      "tag": "plan_id,omitempty",
+      "type": "string"
+    },
+    {
+      "field": "Revised",
+      "tag": "revised,omitempty",
+      "type": "*wire.Plan"
+    },
+    {
+      "field": "Merge",
+      "tag": "merge,omitempty",
+      "type": "*wire.Merge"
+    },
+    {
+      "field": "MergeID",
+      "tag": "merge_id,omitempty",
+      "type": "string"
+    },
+    {
+      "field": "Req",
+      "tag": "req,omitempty",
+      "type": "*wire.Req"
+    },
+    {
+      "field": "Minutes",
+      "tag": "minutes,omitempty",
+      "type": "int"
+    }
+  ]
+}

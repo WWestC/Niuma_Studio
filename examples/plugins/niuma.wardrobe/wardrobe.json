@@ -1,0 +1,10 @@
+{
+  "hair_colors": [
+    { "key": "aurora", "name": "极光薄荷", "hex": "#7fe3c1", "weight": 3 },
+    { "key": "sunset", "name": "落日橙", "hex": "#e07850", "weight": 2 }
+  ],
+  "hair_styles": [
+    { "key": "mohawk", "name": "莫西干", "fringe": 0, "sideburn": 0, "volume": 2, "back": 3, "weight": 1 },
+    { "key": "curly-pony", "name": "曲齿马尾", "fringe": 3, "sideburn": 1, "volume": 1, "back": 1, "weight": 1 }
+  ]
+}

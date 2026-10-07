@@ -1,0 +1,21 @@
+// Niuma Studio Windows resources. build.bat / release.yml compile
+// this with windres (ships with the mingw-w64 gcc that cgo already
+// requires) into rsrc_windows_amd64.syso next to main.go — go build
+// auto-links any *_windows_amd64.syso in the package root, no extra
+// linker flags anywhere.
+//
+// The .ico itself is regenerated from the brand PNGs by
+// `go run ./tools/icongen -ico brand/icon-inverted.ico` right before
+// windres runs, so brand/icon-inverted/ stays the single source of
+// truth (same discipline as the macOS .icns path in build.sh).
+//
+// Two slots, one job each:
+//   1      ICON  the standard slot: Explorer, shortcuts, and the
+//               taskbar fallback all read the exe's first icon.
+//   32512  ICON  the live window's slot: vendored webview registers
+//               its window class with LoadImage(hInstance,
+//               IDI_APPLICATION) — resource id 32512 — so this entry
+//               is what the title bar / taskbar button of the running
+//               app actually show. Harmless if webview ever changes.
+1 ICON "brand/icon-inverted.ico"
+32512 ICON "brand/icon-inverted.ico"

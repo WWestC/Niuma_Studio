@@ -1,0 +1,14 @@
+{
+  "id": "niuma.pulse",
+  "name": "工作室脉搏",
+  "version": "0.2.0",
+  "desc": "跟着房间对话跳动的一块活板＋办公室 HUD 徽章——形态 B 前端插件样例",
+  "author": "Niuma 示例",
+  "engine": ">=1.0",
+  "permissions": ["boards", "widgets", "chat.read", "projects.read"],
+  "contributes": {
+    "boards": [
+      { "id": "pulse", "title": "工作室脉搏", "entry": "web/main.js" }
+    ]
+  }
+}

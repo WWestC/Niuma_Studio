@@ -1,0 +1,97 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { goos: windows, goarch: amd64, ext: .exe, runs-on: windows-latest }
+          - { goos: darwin, goarch: amd64, ext: "", runs-on: macos-latest }
+          - { goos: darwin, goarch: arm64, ext: "", runs-on: macos-latest }
+          - { goos: linux, goarch: amd64, ext: "", runs-on: ubuntu-latest }
+          # cgo (WebKitGTK) can't be cheaply cross-compiled: build on a
+          # native arm64 runner instead (public-repo free tier)
+          - { goos: linux, goarch: arm64, ext: "", runs-on: ubuntu-24.04-arm }
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      # The app window is native on every platform (和 ZCode 一样):
+      # WebKit on macOS, Edge WebView2 behind mingw cgo on Windows,
+      # WebKitGTK on Linux — each OS brings its own webview toolchain.
+      - name: Linux window deps (GTK + WebKitGTK)
+        if: matrix.goos == 'linux'
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
+      - name: Windows cgo toolchain (mingw-w64 gcc)
+        if: matrix.goos == 'windows'
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: false
+          install: mingw-w64-x86_64-gcc
+      - name: Put mingw64 gcc on PATH for cgo
+        if: matrix.goos == 'windows'
+        run: echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
+      # Windows app icon: icongen renders the multi-size .ico from the
+      # brand PNGs, windres (mingw binutils, already on PATH above)
+      # compiles app.rc into the .syso that go build auto-links — the
+      # same two commands build.bat runs locally.
+      - name: Windows app icon (windres → syso)
+        if: matrix.goos == 'windows'
+        run: |
+          go run ./tools/icongen -ico brand/icon-inverted.ico
+          windres -O coff packaging/windows/app.rc -o rsrc_windows_amd64.syso
+      # NOTE: no -ldflags "-s -w" — stripped binaries trip Smart App Control
+      # (the -X version injection below only writes a string, strips nothing)
+      - name: Resolve version (exact on tags, dev-sha otherwise)
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then v="$GITHUB_REF_NAME"; else v="dev-${GITHUB_SHA::7}"; fi
+          echo "VERSION=$v" >> "$GITHUB_ENV"
+      - name: Build
+        shell: bash
+        env:
+          CGO_ENABLED: "1"
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        # Windows: -H windowsgui — double-clicking allocates NO console
+        # window (terminal use keeps its output via the AttachConsole
+        # shim in boot_console_windows.go).
+        run: |
+          gui=""
+          if [ "$GOOS" = "windows" ]; then gui="-H windowsgui"; fi
+          go build -trimpath -ldflags "$gui -X main.version=$VERSION" -o Niuma_Studio_${{ matrix.goos }}_${{ matrix.goarch }}${{ matrix.ext }} .
+      - name: Test
+        env:
+          CGO_ENABLED: "1"
+        run: go test ./...
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Niuma_Studio_${{ matrix.goos }}_${{ matrix.goarch }}
+          path: Niuma_Studio_${{ matrix.goos }}_${{ matrix.goarch }}${{ matrix.ext }}
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Niuma_Studio_*
+          generate_release_notes: true

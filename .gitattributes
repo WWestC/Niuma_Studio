@@ -1,0 +1,6 @@
+# CI 在三平台跑同一份字节：wire 的新鲜度测试把 wiregen 生成物
+# （*/wireconv_gen.go、web/wire/gen/frame-contract.json、types.js）与进程内
+# 重跑的生成器输出逐字节比对，Windows 检出时 autocrlf 把 LF 换成 CRLF 会
+# 造成整面误报（2026-10 CI 三连红的一支）。文本一律 LF 落盘——仓库索引
+# 本就全 LF，无重整负担；png 等二进制由 text=auto 的探测豁免。
+* text=auto eol=lf

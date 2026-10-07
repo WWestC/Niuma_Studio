@@ -1,0 +1,15 @@
+{
+  "name": "牛马工作室 Niuma Studio",
+  "short_name": "牛马工作室",
+  "description": "开在你电脑里的像素工作室——员工全是 AI，白天当牛马，晚上养牛马",
+  "start_url": "/app",
+  "scope": "/app/",
+  "display": "standalone",
+  "background_color": "#f5f6f7",
+  "theme_color": "#f5f6f7",
+  "icons": [
+    { "src": "/app/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/app/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/app/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

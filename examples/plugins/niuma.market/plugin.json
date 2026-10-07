@@ -1,0 +1,14 @@
+{
+  "id": "niuma.market",
+  "name": "插件市场",
+  "version": "0.1.0",
+  "desc": "一键安装/启停/卸载插件——官方源或自备源，本地目录也能导",
+  "author": "Niuma 官方",
+  "engine": ">=1.0",
+  "permissions": ["boards", "market.admin", "ui.toast"],
+  "contributes": {
+    "boards": [
+      { "id": "market", "title": "插件市场", "entry": "web/main.js" }
+    ]
+  }
+}
