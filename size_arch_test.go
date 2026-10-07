@@ -41,7 +41,7 @@ var oversizedAllowlist = map[string]int{
 // A budget row whose directory has no non-test .go files is stale and
 // also fails — the table stays honest through splits and moves.
 var packageBudgets = map[string]int{
-	".":                2800, // 组合根（main + boot_*）
+	".":                2850, // 组合根（main + boot_*） // 2800→2850：windowsgui 启动静音带进 boot_console_windows（终端接回与落盘日志）
 	"server":           21100,
 	"server/verbs":     1100,
 	"server/httputil":  200, // 家族共享写面（writeJSON 一族＋withinDir＋图片扩展表）
@@ -70,7 +70,7 @@ var packageBudgets = map[string]int{
 	"wire":             1120,
 	"capability":       1030,
 	"storetest":        1400, // sqlite 转正重基（四域两实现套件随引擎化扩面）
-	"util":             960,
+	"util":             970,  // 960→970：HideConsole 控制台静音原语（子进程 exec 全量包满）
 	"projects":         920,
 	"requirements":     1015, // sqlite 转正重基
 	"meeting":          890,  // sqlite 转正重基

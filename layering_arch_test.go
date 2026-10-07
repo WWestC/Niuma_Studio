@@ -40,10 +40,10 @@ var layerWhitelist = map[string]map[string]bool{
 	"persist": {},
 	"util":    {"/i18n": true, "/persist": true},
 	"i18n":    {"/persist": true},
-	"vcs":     {"/i18n": true},
+	"vcs":     {"/i18n": true, "/util": true},
 	"media":   {"/i18n": true, "/persist": true},
 	// 档案/桥行：叶子 + wire。
-	"agents": {"/persist": true, "/wire": true},
+	"agents": {"/persist": true, "/util": true, "/wire": true},
 	"zcode":  {"/i18n": true, "/persist": true, "/util": true},
 	// 基座行：叶子 + 档案行 + vcs。
 	"projects":   {"/i18n": true, "/persist": true, "/util": true, "/vcs": true},
